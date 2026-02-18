@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Logs
+backend/logs/
+*.log
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
