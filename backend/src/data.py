@@ -57,6 +57,10 @@ class data:
         self.longueurTotale = len(raw_data) * 8
         self.configType = configType
         self.trameDécodé = trameDécodé
+        #self.donnéegraphique = {
+        #        "data_moteur": [],
+        #        "data_altitude": []
+        #}
 
 
     def __séquencer(self, config_key):
