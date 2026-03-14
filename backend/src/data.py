@@ -1,6 +1,10 @@
 from bitarray import bitarray
 import numpy as np
 
+# À vérifier: little endian ou big endian.
+
+À vérifier: pourquoi data_test donne 0 quand en entrée on a 0000002D
+
 
 # Dictionnaire de configuration pour l'extraction des données du message
 # Le premier chiffre représente la position de départ
@@ -14,8 +18,7 @@ CONFIG_TRAME = {
     "data_test": (32, 32),
     "e1": (80, 4),
     "e2": (84, 12),
-    "timestamp": (96, 16),
-    "crc16": (112, 16),
+    "timestamp": (96, 32),
     "ending_bit": (128, 8)
 }
 
@@ -28,9 +31,8 @@ CONFIG_TYPE = {
     "data_moteur": np.float32,
     "data_test": np.int32,
     "e1": bitarray,
-    "e2": float,
-    "timestamp": float,
-    "crc16": float,
+    "e2": bitarray,
+    "timestamp": np.float32,
     "ending_bit": str
 }
 
@@ -40,10 +42,10 @@ RÉSULTAT = {
     "seq": bitarray,
     "hb": bool,
     "data_moteur": np.float32,
+    "data_test": np.int32,
     "e1": int,
     "e2": float,
     "timestamp": float,
-    "crc16": float,
     "ending_bit": str
 }
 
@@ -67,7 +69,7 @@ class data:
 
     def __convertir(self, message, type, longueur):
 
-        # La méthode supporte actuellement string, float32, int32, bitarray et bool
+        # La méthode supporte actuellement string(char 8bits), float32, int32, bitarray et bool
         if type == str:
             return 
 
@@ -75,7 +77,7 @@ class data:
             return float(np.array([message], dtype=np.uint32).view(np.float32)[0])
         
         if type == np.int32:
-            return int(message)
+            return int(np.int32(message))
         
         if type == bitarray: # bitarray a été utilisé au cas où le message n'est pas 8 bits
             return bitarray(format(message, str(longueur) + 'b'))
