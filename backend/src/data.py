@@ -3,8 +3,6 @@ import numpy as np
 
 # À vérifier: little endian ou big endian.
 
-À vérifier: pourquoi data_test donne 0 quand en entrée on a 0000002D
-
 
 # Dictionnaire de configuration pour l'extraction des données du message
 # Le premier chiffre représente la position de départ
