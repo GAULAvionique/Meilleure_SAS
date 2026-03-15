@@ -48,17 +48,13 @@ RÉSULTAT = {
 }
 
 
-class data:
+class Data:
     def __init__(self, raw_data, configTrame, configType, trameDécodé):
         self.raw = int.from_bytes(raw_data, byteorder='big')
         self.config = configTrame
         self.longueurTotale = len(raw_data) * 8
         self.configType = configType
         self.trameDécodé = trameDécodé
-        #self.donnéegraphique = {
-        #        "data_moteur": [],
-        #        "data_altitude": []
-        #}
 
 
     def __séquencer(self, config_key):
@@ -73,7 +69,7 @@ class data:
 
         # La méthode supporte actuellement string(char 8bits), float32, int32, bitarray et bool
         if type == str:
-            return 
+            return message.to_bytes(int(longueur/8), byteorder='big').decode('utf-8')
 
         if type == np.float32:
             return float(np.array([message], dtype=np.uint32).view(np.float32)[0])

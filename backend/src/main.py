@@ -1,5 +1,5 @@
-import data as data
-import bitarray as bitarray
+import Data as data
+from bitarray import bitarray
 import numpy as np
 
 
@@ -70,7 +70,12 @@ if __name__ == "__main__":
         "line_feed": (456, 8)          # Octet 57
     }
 
-    trame = data.data(raw_data, CONFIG_TRAME, CONFIG_TYPE, RÉSULTAT)
+    trame = data.Data(raw_data, CONFIG_TRAME, CONFIG_TYPE, RÉSULTAT)
     print(trame.raw)
     trame.décode()
     print(trame.trameDécodé)
+
+    message = int.from_bytes(bytes.fromhex('1000002D'), byteorder='big')
+    longueur = 32
+    a = bitarray(format(message, str(longueur) + 'b'))
+    print(a)
