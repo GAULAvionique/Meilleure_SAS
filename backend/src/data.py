@@ -86,7 +86,6 @@ class Data:
 
     def décode(self):
         for morceau in self.config:
-            #chaine = bitarray(uint=self.__séquenceur(morceau), self.config[morceau][1])
             intMessage = self.__séquencer(morceau)
             self.trameDécodé[morceau] = self.__convertir(intMessage, self.configType[morceau], self.config[morceau][1])
 
