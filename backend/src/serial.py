@@ -9,6 +9,7 @@ class mySerial:
         # ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=1)
         self.ser = ser
         self.data_queue = queue.Queue(maxsize=queue_size)
+        self.event = threading.Event()
         self.running = True
         self.thread = None
         # longueur de la trame
@@ -21,6 +22,9 @@ class mySerial:
         # Si le symbole de départ a été trouvé, on est en mode enregistrement et le compteur se réinitialise
         self.enEnregistrement = False
         self.bytesRestant = nBytes
+
+        # Accumulateur de la trame pour la valider lorsqu'elle est pleine
+        self.trame = bytes()
     
     def start(self):
         """Start background reading thread"""
@@ -40,33 +44,35 @@ class mySerial:
                 # 5. Mettre dans objet queue
 
                 if self.ser.in_waiting:
-                    data = self.ser.read(self.ser.in_waiting)
+                    data = self.ser.read(self.ser.in_waiting) # L'algorithme prend en compte que la trame prend plus de 0.001s à s'enregistrer.
                     if data:
+                        if self.enEnregistrement:
+                            longueurChaine = len(data)
+                            self.trame += data[:self.bytesRestant]
+                            self.bytesRestant -= longueurChaine
 
-                        for i in range(len(data)-1):
-                            """ if self.enEnregistrement:
-                                if len(data) < self.bytesRestant:
+                            if self.bytesRestant <= 0:
+                                if self.trame[-1] == self.symFin:
                                     try:
                                         self.data_queue.put(data, timeout=0.1)
-                                        self.bytesRestant -= len(data)
+                                        self.event.set()
+
+                                        self.trame = bytes()
+                                        self.enEnregistrement = False
+                                        self.bytesRestant = 0
                                     except queue.Full:
                                         print("⚠️  Queue full, dropping data")
                                 else:
-                                    try:
-                                        self.data_queue.put(data[:self.bytesRestant], timeout=0.1) """
-                            # à changer, if enregistrement doit enregistrer un par un les bytes
-
-                            elif data[i] == self.symDépart or data[i] == self.symDépart + 128: # +128, car data[i] est un int et le premier bit est pour déterminer la provenance de la trame.
-                                try:
-                                    self.data_queue.put(data[i], timeout=0.1)
+                                    self.trame = bytes()
+                                    self.enEnregistrement = False
+                                    self.bytesRestant = 0
+                        else:
+                            for i in range(len(data)-1):
+                                if data[i] == self.symDépart or data[i] == self.symDépart + 128: # +128, car data[i] est un int et le premier bit est pour déterminer la provenance de la trame.
+                                    self.trame = data[i:]
                                     self.enEnregistrement = True
-                                    self.bytesRestant = self.N_BYTES - 1
-                                except queue.Full:
-                                    print("⚠️  Queue full, dropping data")
-                            
-                            elif data[i]
-
-
+                                    self.bytesRestant = self.N_BYTES - len(self.trame)
+                                    break
                 else:
                     time.sleep(0.001)  # Small delay when no data
             except Exception as e:
