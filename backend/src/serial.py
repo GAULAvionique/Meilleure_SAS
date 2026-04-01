@@ -31,6 +31,18 @@ class mySerial:
         self.thread = threading.Thread(target=self._read_loop)
         self.thread.daemon = True
         self.thread.start()
+
+    def _validerEtEnvoyer(self):
+        if self.trame[-1] == self.symFin:
+            try:
+                self.data_queue.put(self.trame, timeout=0.1)
+                self.event.set()
+            except queue.Full:
+                print("⚠️  Queue full, dropping data")
+
+        self.trame = bytes()
+        self.enEnregistrement = False
+        self.bytesRestant = self.N_BYTES
     
     def _read_loop(self):
         """Background reading loop"""
@@ -47,31 +59,22 @@ class mySerial:
                     data = self.ser.read(self.ser.in_waiting) # L'algorithme prend en compte que la trame prend plus de 0.001s à s'enregistrer.
                     if data:
                         if self.enEnregistrement:
-                            longueurChaine = len(data)
+                            longueurChaine = len(data[:self.bytesRestant])
                             self.trame += data[:self.bytesRestant]
                             self.bytesRestant -= longueurChaine
 
                             if self.bytesRestant <= 0:
-                                if self.trame[-1] == self.symFin:
-                                    try:
-                                        self.data_queue.put(data, timeout=0.1)
-                                        self.event.set()
-
-                                        self.trame = bytes()
-                                        self.enEnregistrement = False
-                                        self.bytesRestant = 0
-                                    except queue.Full:
-                                        print("⚠️  Queue full, dropping data")
-                                else:
-                                    self.trame = bytes()
-                                    self.enEnregistrement = False
-                                    self.bytesRestant = 0
+                                self._validerEtEnvoyer()
                         else:
-                            for i in range(len(data)-1):
+                            for i in range(len(data)):
                                 if data[i] == self.symDépart or data[i] == self.symDépart + 128: # +128, car data[i] est un int et le premier bit est pour déterminer la provenance de la trame.
-                                    self.trame = data[i:]
-                                    self.enEnregistrement = True
+                                    self.trame = data[i:i + self.N_BYTES]
                                     self.bytesRestant = self.N_BYTES - len(self.trame)
+
+                                    if self.bytesRestant <= 0:
+                                        self._validerEtEnvoyer()
+                                    else:
+                                        self.enEnregistrement = True
                                     break
                 else:
                     time.sleep(0.001)  # Small delay when no data
