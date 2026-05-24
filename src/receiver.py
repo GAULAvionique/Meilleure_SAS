@@ -1,0 +1,52 @@
+import os
+os.environ["MAVLINK20"] = "1"
+os.environ.pop("MAV_IGNORE_CRC", 1)
+
+import time
+from pymavlink import mavutil
+
+# odb_mavlink_v1.py — copié depuis le repo ODB (commit: 24/05/26)
+# Mettre à jour si le dialecte MAVLink change
+import odb_mavlink_v1 as mavlink_dialect
+
+
+def run_receiver(serial_port, source_system, baud_rate, data_queue):
+    try:
+        master = mavutil.mavlink_connection(
+            serial_port,
+            baud=baud_rate,
+            source_system=source_system,
+        )
+        master.mav = mavlink_dialect.MAVLink(master, srcSystem=source_system, srcComponent=1)
+        master.mav.robust_parsing = True
+        print(f"Station Sol active sur {serial_port}")
+
+        while True:
+            try:
+                msg = master.recv_match(blocking=True)
+            except (OSError, IOError) as exc:
+                print(f"\n[ERREUR LIAISON SERIE] {exc}")
+                break
+
+            if not msg:
+                continue
+
+            msg_type = msg.get_type()
+            sys_id = msg.get_srcSystem()
+
+            if msg_type == "BAD_DATA":
+                raw_payload = msg.get_msgbuf()
+                print(f"\n\033[91m[ERREUR CRC/FORMAT]\033[0m Reçu : {raw_payload.hex(' ')}")
+                continue
+
+            if msg_type == "ROCKET_TELEMETRY":
+                data_queue.put(msg)
+                continue
+
+            print(f"\n[RAW] Type non géré : {msg_type} (Source ID: {sys_id})")
+            print(f"  Contenu : {msg.to_dict()}")
+
+    except KeyboardInterrupt:
+        print("\nArrêt de la station sol.")
+    except Exception as exc:
+        print(f"\n[ERREUR FATALE] {exc}")
