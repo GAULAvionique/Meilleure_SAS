@@ -1,3 +1,5 @@
+# Configuration du receiver
+
 SERIAL_PORT = "COM14"
 #SERIAL_PORT = "udpin:0.0.0.0:14550"
 BAUD_RATE = 115200
@@ -6,12 +8,16 @@ BOOSTER_SYS_ID = 2
 SUSTAINER_SYS_ID = 3
 
 
-CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié (attention que les clés soient exactement les mêmes que celle du dictionnaire décodé)
+
+# Configuration de DataManager
+
+CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié 
+                                # (attention que les clés soient exactement les mêmes que celle du dictionnaire décodé).
     "time_boot_ms"      : 1,
     "system_states"     : 1,
     "event_states"      : 1,
     "mission_state"     : 1,
-    "battery_mv"        : 1000, # On a gardé le mv pour standardiser le nom des varibales, mais elle sera en V
+    "battery_mv"        : 1000, # On a gardé le mv pour standardiser le nom des varibales, mais elle sera en V.
 
     "roll"              : 100,
     "pitch"             : 100,
@@ -47,10 +53,11 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "highg_acc_vertical": 1,
     "kalman_z"          : 100,
     "kalman_v"          : 100,
+    "altitude_msl_m"    : 1
 }
 
 
-SYSTEM_STATES_FLAGS = {
+SYSTEM_STATES_FLAGS = {         # Dictionnaire pour extraire les flags dans "system_states"
     "FLAG_IDEFIX_OK"      : 14,
     "FLAG_BT_OK"          : 13,
     "FLAG_FLASH_OK"       : 12,
@@ -69,7 +76,7 @@ SYSTEM_STATES_FLAGS = {
 }
 
 
-EVENT_STATES_FLAGS = {
+EVENT_STATES_FLAGS = {          # Dictionnaire pour extraire les flags dans "event_states"
     "FLAG_PYRO1_FIRED"       : 0,
     "FLAG_PYRO2_FIRED"       : 1,
     "FLAG_PYRO3_FIRED"       : 2,
@@ -81,7 +88,7 @@ EVENT_STATES_FLAGS = {
 }
 
 
-MISSION_STATES = {
+MISSION_STATES = {              # Dictionnaire pour donner du sens aux "mission_state"
     0: "STATE_INIT",
     1: "STATE_PREFLIGHT",
     2: "STATE_ARMED",
@@ -90,7 +97,10 @@ MISSION_STATES = {
 }
 
 
-CONTRAT = [
+# Configuration pour la classe logger
+
+CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log dans l'ordre. Le nom doit correspondre 
+                    # à une valeur du dictionnaire de conversion.
     "time_boot_ms",
     "mission_state",
     "battery_mv",
@@ -123,6 +133,8 @@ CONTRAT = [
     "highg_acc_vertical",
     "kalman_z",
     "kalman_v",
+    "altitude_msl_m",
+
     "FLAG_IDEFIX_OK",
     "FLAG_BT_OK",
     "FLAG_FLASH_OK",

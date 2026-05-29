@@ -11,7 +11,7 @@ class DataManager(QObject):
     def __init__(self, logger_top, logger_bot, data_queue):
         super().__init__()
 
-        self.queue = data_queue                  # Queue remplie par le serial
+        self.queue = data_queue             # Queue remplie par le receiver
         self.logger_top = logger_top        # Objet logger de MyLogger correspondant au haut de la fusée
         self.logger_bot = logger_bot        # Objet logger de MyLogger correspondant au bas de la fusée
 
