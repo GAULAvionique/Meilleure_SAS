@@ -1,6 +1,6 @@
 import os
-from mainwindow import Ui_MainWindow
-from PySide6.QtWidgets import QMainWindow, QApplication
+from mainWindow import PageFusee
+from PySide6.QtWidgets import QMainWindow, QApplication, QTabWidget
 from qt_material import apply_stylesheet
 from datetime import datetime
 import queue
@@ -13,35 +13,67 @@ from Logger import MyLogger
 
 
 class MyWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, logger_sustainer, logger_booster):
         super().__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+
+        self.logger_booster = logger_booster
+        self.logger_sustainer = logger_sustainer
+
+        self.page_booster = PageFusee()
+        self.page_sustainer = PageFusee()
+        
+        self.tabs = QTabWidget()
+        self.tabs.addTab(self.page_booster, "Booster")
+        self.tabs.addTab(self.page_sustainer, "Sustainer")
+
+        self.setCentralWidget(self.tabs)
+
+    def closeEvent(self, event):
+        self.logger_booster.stop()
+        self.logger_sustainer.stop()
+        event.accept()
+
+
 
 if __name__ == "__main__":
     os.environ["QT_AUTOSCREENSCALE_FACTOR"] = "1"
 
-
     data_queue = queue.Queue()
 
-    maintenant = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    nom_fichier_booster = "booster_" + maintenant
-    nom_fichier_sustainer = "sustainer_" + maintenant
 
+    # Création des fichiers
+
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(base_dir, "logs")
+    os.makedirs(logs_dir, exist_ok=True)
+
+    maintenant = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    nom_fichier_booster = os.path.join(logs_dir, "booster_" + maintenant + ".csv")
+    nom_fichier_sustainer = os.path.join(logs_dir, "sustainer_" + maintenant + ".csv")
+
+
+    # Création des instances
+    
     logger_booster = MyLogger(nom_fichier_booster)
     logger_sustainer = MyLogger(nom_fichier_sustainer)
 
     data_manager = DataManager(logger_sustainer, logger_booster, data_queue)
 
 
-    thread = threading.Thread(target=run_receiver(serial_port=SERIAL_PORT, source_system=SOURCE_SYSTEM, 
-                                                  baud_rate=BAUD_RATE, data_queue=data_queue), daemon=True)
+    # Création du thread de la fonction receiver
+
+    thread = threading.Thread(target=run_receiver, args=(SERIAL_PORT, SOURCE_SYSTEM, BAUD_RATE, data_queue), daemon=True)
     thread.start()
 
+
+    # Création de l'interface
 
     app = QApplication([])
     apply_stylesheet(app, theme="dark_red.xml")
     
-    window = MyWindow()
+    window = MyWindow(logger_booster, logger_sustainer)
     window.showMaximized()
+    data_manager.signal_booster.connect(window.page_booster.update)
+    data_manager.signal_sustainer.connect(window.page_sustainer.update)
+
     app.exec()

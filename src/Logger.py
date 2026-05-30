@@ -24,6 +24,7 @@ class MyLogger:
             try:
                 ligne = self.queue.get(timeout=0.1)
                 self.fichier.write(ligne)
+                self.fichier.flush()
             except queue.Empty:
                 continue
 

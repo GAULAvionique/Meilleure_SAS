@@ -5,8 +5,8 @@ import queue
 
 
 class DataManager(QObject):
-    signal_top = Signal(dict)
-    signal_bot = Signal(dict)
+    signal_sustainer = Signal(dict)
+    signal_booster = Signal(dict)
 
     def __init__(self, logger_top, logger_bot, data_queue):
         super().__init__()
@@ -31,10 +31,12 @@ class DataManager(QObject):
                 if CONVERSIONS[key] != 1:
                     dico[key] /= CONVERSIONS[key]
             else:
-                print("Une clé n'est pas définie dans 'CONVERSIONS'.")
+                if key != "mavpackettype":
+                    print(f"La clé {key} n'est pas définie dans 'CONVERSIONS'.")
         
 
     def _extract_flags(self, dico):
+
         system_states = {}
         event_states = {}
         for key in SYSTEM_STATES_FLAGS:
@@ -66,12 +68,13 @@ class DataManager(QObject):
         if msg.get_srcSystem() == SUSTAINER_SYS_ID:
             self.dico_top = dico
             self.logger_top.log(dico)
-            self.signal_top.emit(dico)
+            self.signal_sustainer.emit(dico)
             
         elif msg.get_srcSystem() == BOOSTER_SYS_ID:
             self.dico_bot = dico
             self.logger_bot.log(dico)
-            self.signal_bot.emit(dico)
+            self.signal_booster.emit(dico)
+
 
         else:
             print("Le message provient d'une source inconnue")

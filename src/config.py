@@ -1,7 +1,7 @@
 # Configuration du receiver
 
-SERIAL_PORT = "COM14"
-#SERIAL_PORT = "udpin:0.0.0.0:14550"
+#SERIAL_PORT = "COM14"
+SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
 BOOSTER_SYS_ID = 2
@@ -48,7 +48,7 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "satellites_nb"     : 1,
 
 
-    "pyros_connected"   : 1,
+    # "pyros_connected"   : 1,
     "imu_acc_vertical"  : 1,
     "highg_acc_vertical": 1,
     "kalman_z"          : 100,
@@ -128,7 +128,7 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "vel",
     "cog",
     "satellites_nb",
-    "pyros_connected",
+    # "pyros_connected",
     "imu_acc_vertical",
     "highg_acc_vertical",
     "kalman_z",
