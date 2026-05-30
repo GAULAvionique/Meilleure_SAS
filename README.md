@@ -2,7 +2,7 @@
 
 Le code de la station au sol se divise en plusieurs modules qui se complètent mutuellement. Le backend a été conçu pour être facilement modifiable, mais le frontend devra probablement être modifié à chaque année. 
 
-# Backend de la station au sol
+# Code de la station au sol
 
 Le receiver met le message mavlink dans un objet queue que DataManager convertit en dictionnaire de données standardisées. DataManager s'occupe ensuite de distribuer le contenu à l'interface et à la classe MyLogger. Voici une description plus détaillée de ce qu'accomplit chaque module:
 
