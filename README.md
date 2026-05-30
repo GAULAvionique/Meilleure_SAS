@@ -12,6 +12,6 @@ Le receiver met le message mavlink dans un objet queue que DataManager convertit
 
 - MyLogger : Classe très générale qui écrit ce qu'on lui donne en entrée de sa méthode log(), dans un fichier. La fonction log() prend en entrée un dictionnaire et écrit uniquement les valeurs dont les clés sont présentes dans CONTRAT (config.py), en ignorant le reste. La classe prend en paramètre le nom d'un fichier et crée celui-ci en y ajoutant des données à chaque fois que log() est appelé. Les fichiers se retrouveront dans le dossier logs. Lorsque l'instance est créée, un thread est lancé à l'intérieur de la classe, dans lequel la méthode _worker() s'exécute.
 
-- MainWindow : Code de l'interface (codé à la main) qui reçoit un signal QT et affiche le contenu du signal dans l'interface. Le signal doit contenir un dictionnaire.
+- MainWindow : Code de l'interface (codé à la main) qui reçoit un signal QT et affiche le contenu du signal (dictionnaire) dans l'interface.
 
 Le fichier config.py contient la configuration du receiver, du DataManager et du Logger.
