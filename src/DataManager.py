@@ -2,11 +2,13 @@ from config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, MISSION
 from PySide6.QtCore import QObject, Signal
 import threading
 import queue
+import time
 
 
 class DataManager(QObject):
     signal_sustainer = Signal(dict)
     signal_booster = Signal(dict)
+    signal_freq = Signal(float)
 
     def __init__(self, logger_top, logger_bot, data_queue):
         super().__init__()
@@ -14,6 +16,9 @@ class DataManager(QObject):
         self.queue = data_queue             # Queue remplie par le receiver
         self.logger_top = logger_top        # Objet logger de MyLogger correspondant au haut de la fusée
         self.logger_bot = logger_bot        # Objet logger de MyLogger correspondant au bas de la fusée
+
+        self._msg_count = 0                 # compte les messages
+        self._last_time = time.time()       # temps du dernier calcul
 
         self.dico_top = {}                  # Dictionnaire de l'état présent pour le haut de la fusée
         self.dico_bot = {}                  # Dictionnaire de l'état présent pour le bas de la fusée
@@ -60,24 +65,32 @@ class DataManager(QObject):
 
 
     def _read(self, msg):
-        dico = msg.to_dict()
-        self._scaling(dico)
-        self._extract_flags(dico)
-        self._extract_enum(dico)
+        try:
+            dico = msg.to_dict()
+            self._scaling(dico)
+            self._extract_flags(dico)
+            self._extract_enum(dico)
 
-        if msg.get_srcSystem() == SUSTAINER_SYS_ID:
-            self.dico_top = dico
-            self.logger_top.log(dico)
-            self.signal_sustainer.emit(dico)
-            
-        elif msg.get_srcSystem() == BOOSTER_SYS_ID:
-            self.dico_bot = dico
-            self.logger_bot.log(dico)
-            self.signal_booster.emit(dico)
+            self._msg_count += 1
 
+            if msg.get_srcSystem() == SUSTAINER_SYS_ID:
+                self.dico_top = dico
+                self.logger_top.log(dico)
+                self.signal_sustainer.emit(dico)
+                
+            elif msg.get_srcSystem() == BOOSTER_SYS_ID:
+                self.dico_bot = dico
+                self.logger_bot.log(dico)
+                self.signal_booster.emit(dico)
 
-        else:
-            print("Le message provient d'une source inconnue")
+            else:
+                print("Le message provient d'une source inconnue")
+
+        except KeyError as exc:
+            print("[AVERTISSEMENT] Clé manquante : {exc}")
+        
+        except Exception as exc:
+            print(f"[ERREUR] _read a planté sur message {msg.get_type()} : {exc}")
 
 
     def _run(self):
@@ -86,4 +99,11 @@ class DataManager(QObject):
                 ligne = self.queue.get(timeout=0.1)
                 self._read(ligne)
             except queue.Empty:
-                continue
+                pass
+
+            now = time.time()
+            if now - self._last_time >= 1.0:
+                freq = self._msg_count / (now - self._last_time)
+                self.signal_freq.emit(round(freq, 1))
+                self._msg_count = 0
+                self._last_time = now

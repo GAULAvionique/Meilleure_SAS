@@ -1,14 +1,15 @@
 import queue
 import threading
+import csv
 from config import CONTRAT
 
 
 class MyLogger:
     def __init__(self, nomFichier):     # Contrat est la liste de tout ce qu'on veut afficher dans le fichier ex. ['time', 'altitude', 'speedX'].
         self.fichier = open(nomFichier, 'w')
-
-        header = ",".join(CONTRAT)
-        self.fichier.write(header + '\n')
+        self.writer = csv.DictWriter(self.fichier, fieldnames=CONTRAT, extrasaction='ignore', restval='N/A') # Se fie à CONTRAT,
+        # si une données est de trop, il l'ignore et si une données est manquante, il écrit N/A
+        self.writer.writeheader()
 
         self.queue = queue.Queue()
 
@@ -22,20 +23,15 @@ class MyLogger:
     def _worker(self):                          # Le worker est appelé automatiquement lorsque l'objet est créé.
         while self._working.is_set():
             try:
-                ligne = self.queue.get(timeout=0.1)
-                self.fichier.write(ligne)
+                données = self.queue.get(timeout=0.1)
+                self.writer.writerow(données)
                 self.fichier.flush()
             except queue.Empty:
                 continue
 
 
     def log(self, données):                     # Méthode pour ajouter un paquet de données dans la queue du worker.
-        affichage = ''
-        for item in CONTRAT:
-            affichage += str(données[item]) + ','
-
-        affichage = affichage[:-1] + '\n'
-        self.queue.put(affichage)
+        self.queue.put(données)
 
 
     def stop(self):                             # Cette méthode doit être appelé pour terminer correctement l'exécution du thread.

@@ -13,11 +13,13 @@ from Logger import MyLogger
 
 
 class MyWindow(QMainWindow):
-    def __init__(self, logger_sustainer, logger_booster):
+    def __init__(self, logger_sustainer, logger_booster, stop, thread):
         super().__init__()
 
         self.logger_booster = logger_booster
         self.logger_sustainer = logger_sustainer
+        self.thread = thread
+        self.stop = stop
 
         self.page_booster = PageFusee()
         self.page_sustainer = PageFusee()
@@ -29,6 +31,8 @@ class MyWindow(QMainWindow):
         self.setCentralWidget(self.tabs)
 
     def closeEvent(self, event):
+        self.stop.set()
+        self.thread.join()
         self.logger_booster.stop()
         self.logger_sustainer.stop()
         event.accept()
@@ -62,7 +66,9 @@ if __name__ == "__main__":
 
     # Création du thread de la fonction receiver
 
-    thread = threading.Thread(target=run_receiver, args=(SERIAL_PORT, SOURCE_SYSTEM, BAUD_RATE, data_queue), daemon=True)
+    stop = threading.Event()
+
+    thread = threading.Thread(target=run_receiver, args=(SERIAL_PORT, SOURCE_SYSTEM, BAUD_RATE, data_queue, stop))
     thread.start()
 
 
@@ -71,9 +77,12 @@ if __name__ == "__main__":
     app = QApplication([])
     apply_stylesheet(app, theme="dark_red.xml")
     
-    window = MyWindow(logger_booster, logger_sustainer)
+    window = MyWindow(logger_booster, logger_sustainer, stop, thread)
     window.showMaximized()
-    data_manager.signal_booster.connect(window.page_booster.update)
-    data_manager.signal_sustainer.connect(window.page_sustainer.update)
+
+    data_manager.signal_booster.connect(window.page_booster.update_dico)
+    data_manager.signal_sustainer.connect(window.page_sustainer.update_dico)
+    data_manager.signal_freq.connect(window.page_booster.update_freq)
+    data_manager.signal_freq.connect(window.page_sustainer.update_freq)
 
     app.exec()

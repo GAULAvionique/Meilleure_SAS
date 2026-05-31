@@ -9,6 +9,7 @@ class PageFusee(QWidget):
         # --- État général ---
         self.label_mission_state  = QLabel("mission_state: --")
         self.label_battery        = QLabel("battery: -- V")
+        self.label_freq_msg       = QLabel("Fréquence messages: -- Hz")
 
         # --- GPS ---
         self.label_lat            = QLabel("lat: -- °")
@@ -61,7 +62,7 @@ class PageFusee(QWidget):
         self.setLayout(layout)
 
 
-    def update(self, dico):
+    def update_dico(self, dico):
         self.label_mission_state.setText(f"mission_state: {dico['mission_state']}")
         self.label_battery.setText(f"battery: {dico['battery_mv']} V")
 
@@ -101,6 +102,9 @@ class PageFusee(QWidget):
 
         #self.label_pyros_connected.setText(f"pyros_connected: {dico['pyros_connected']}")
 
+
+    def update_freq(self, freq_msg):
+        self.label_freq_msg.setText(f"freq_msg: {freq_msg} Hz")
 
 
 

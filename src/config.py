@@ -1,12 +1,14 @@
 # Configuration du receiver
 
-#SERIAL_PORT = "COM14"
+#SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
 SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
 BOOSTER_SYS_ID = 2
 SUSTAINER_SYS_ID = 3
 
+RECV_TIMEOUT_S = 2.0
+RECONNECT_DELAY_S = 2.0
 
 
 # Configuration de DataManager
