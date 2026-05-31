@@ -1,4 +1,4 @@
-# Configuration du receiver
+# --- Configuration du receiver ---
 
 #SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
 SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
@@ -11,7 +11,7 @@ RECV_TIMEOUT_S = 2.0
 RECONNECT_DELAY_S = 2.0
 
 
-# Configuration de DataManager
+# --- Configuration de DataManager ---
 
 CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié 
                                 # (attention que les clés soient exactement les mêmes que celle du dictionnaire décodé).
@@ -99,7 +99,7 @@ MISSION_STATES = {              # Dictionnaire pour donner du sens aux "mission_
 }
 
 
-# Configuration pour la classe logger
+# --- Configuration pour la classe logger ---
 
 CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log dans l'ordre. Le nom doit correspondre 
                     # à une valeur du dictionnaire de conversion.
