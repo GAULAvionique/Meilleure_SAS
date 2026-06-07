@@ -1,14 +1,14 @@
 from config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, MISSION_STATES, BOOSTER_SYS_ID, SUSTAINER_SYS_ID
-from PySide6.QtCore import QObject, Signal
+from PyQt6.QtCore import QObject, pyqtSignal
 import threading
 import queue
 import time
 
 
 class DataManager(QObject):
-    signal_sustainer = Signal(dict)
-    signal_booster = Signal(dict)
-    signal_freq = Signal(float)
+    signal_sustainer = pyqtSignal(dict)
+    signal_booster = pyqtSignal(dict)
+    signal_freq = pyqtSignal(float)
 
     def __init__(self, logger_top, logger_bot, data_queue):
         super().__init__()

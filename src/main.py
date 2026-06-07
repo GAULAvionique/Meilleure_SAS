@@ -1,6 +1,6 @@
 import os
 from mainWindow import PageDonnees, Header, PageBelle
-from PySide6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet
 from datetime import datetime
 import queue
@@ -30,10 +30,10 @@ class MyWindow(QMainWindow):
         self.page_belle_sustainer = PageBelle(obj_path)
         
         self.tabs = QTabWidget()
-        self.tabs.addTab(self.page_booster, "Booster")
-        self.tabs.addTab(self.page_sustainer, "Sustainer")
-        self.tabs.addTab(self.page_belle_booster,   "Booster (vue)")
-        self.tabs.addTab(self.page_belle_sustainer, "Sustainer (vue)")
+        self.tabs.addTab(self.page_booster, "Booster (Données)")
+        self.tabs.addTab(self.page_sustainer, "Sustainer (Données)")
+        self.tabs.addTab(self.page_belle_booster,   "Booster")
+        self.tabs.addTab(self.page_belle_sustainer, "Sustainer")
 
         container = QWidget()
         layout = QVBoxLayout()

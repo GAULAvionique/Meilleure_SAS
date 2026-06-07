@@ -1,9 +1,9 @@
-from PySide6.QtWidgets import (
+from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QGroupBox,
     QScrollArea, QSizePolicy, 
 )
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
 import numpy as np
 import os
@@ -23,12 +23,12 @@ class Header(QWidget):
         logo_label = QLabel()
         logo_path = os.path.join(os.path.dirname(__file__), "assets", "logo_gaul.png")
         if os.path.exists(logo_path):
-            pixmap = QPixmap(logo_path).scaledToHeight(50, Qt.SmoothTransformation)
+            pixmap = QPixmap(logo_path).scaledToHeight(50, Qt.TransformationMode.SmoothTransformation)
             logo_label.setPixmap(pixmap)
         else:
             logo_label.setText("GAUL")
 
-        logo_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        logo_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
         layout.addWidget(label_titre)
         layout.addStretch()
@@ -216,7 +216,7 @@ class PageDonnees(QWidget):
 
     def _groupe_system_states(self):
         groupe = QGroupBox("System States")
-        groupe.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout = QHBoxLayout()
         layout.setContentsMargins(4, 4, 4, 0)
         layout.setSpacing(5)
@@ -230,15 +230,15 @@ class PageDonnees(QWidget):
             self.label_flag_pyro2_conn,     self.label_flag_pyro3_conn,
             self.label_flag_pyro4_conn,
         ]:
-            label.setAlignment(Qt.AlignCenter)
-            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
             layout.addWidget(label)
         groupe.setLayout(layout)
         return groupe
 
     def _groupe_event_states(self):
         groupe = QGroupBox("Event States")
-        groupe.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout = QHBoxLayout()
         layout.setContentsMargins(4, 4, 4, 0)
         layout.setSpacing(5)
@@ -248,8 +248,8 @@ class PageDonnees(QWidget):
             self.label_flag_apogee_detected, self.label_flag_main_deployed,
             self.label_flag_drogue_deployed, self.label_flag_mach_lock_enabled,
         ]:
-            label.setAlignment(Qt.AlignCenter)
-            label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
             layout.addWidget(label)
         groupe.setLayout(layout)
         return groupe
@@ -371,7 +371,7 @@ class TrajectoryMap(QWidget):
  
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         w, h = self.width(), self.height()
  
         painter.fillRect(0, 0, w, h, QColor(25, 25, 40))
@@ -381,7 +381,7 @@ class TrajectoryMap(QWidget):
         if not self.points:
             painter.setPen(QPen(QColor(120, 120, 140)))
             painter.setFont(QFont("Arial", 9))
-            painter.drawText(0, 0, w, h, Qt.AlignCenter, "En attente GPS...")
+            painter.drawText(0, 0, w, h, Qt.AlignmentFlag.AlignCenter, "En attente GPS...")
             return
  
         lats = [p[0] for p in self.points]
@@ -403,14 +403,14 @@ class TrajectoryMap(QWidget):
                 painter.drawLine(x1, y1, x2, y2)
  
         x, y = to_screen(*self.points[-1])
-        painter.setPen(Qt.NoPen)
+        painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(255, 60, 60))
         painter.drawEllipse(x - 6, y - 6, 12, 12)
  
         lat, lon = self.points[-1]
         painter.setPen(QPen(QColor(200, 200, 200)))
         painter.setFont(QFont("Arial", 8))
-        painter.drawText(5, 5, w - 10, 20, Qt.AlignRight, f"{lat:.6f}, {lon:.6f}")
+        painter.drawText(5, 5, w - 10, 20, Qt.AlignmentFlag.AlignRight, f"{lat:.6f}, {lon:.6f}")
  
  
 # ── Vue 3D fusée ──────────────────────────────────────────────────────────────
@@ -459,7 +459,7 @@ class RocketView3D(QWidget):
  
         except Exception as e:
             lbl = QLabel(f"3D non disponible\n{e}")
-            lbl.setAlignment(Qt.AlignCenter)
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lbl.setStyleSheet("color: #888;")
             layout.addWidget(lbl)
  
@@ -487,11 +487,11 @@ class PageBelle(QWidget):
  
         # ── Mission state + temps ──────────────────────────────────────────
         self.label_mission = QLabel("--")
-        self.label_mission.setAlignment(Qt.AlignCenter)
-        self.label_mission.setFont(QFont("Arial", 16, QFont.Bold))
+        self.label_mission.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_mission.setFont(QFont("Arial", 16, QFont.Weight.Bold))
  
         self.label_time = QLabel("00:00.000")
-        self.label_time.setAlignment(Qt.AlignCenter)
+        self.label_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_time.setFont(QFont("Arial", 13))
         self.label_time.setStyleSheet("color: #AAAAAA;")
  
@@ -524,12 +524,10 @@ class PageBelle(QWidget):
             pen=pg.mkPen('#FF9800', width=2), name='Acc. (m/s²)'
         )
  
-        # ── Layout ─────────────────────────────────────────────────────────
         layout_principal = QHBoxLayout()
         layout_principal.setSpacing(6)
-        layout_principal.setContentsMargins(6, 6, 6, 6)
+        layout_principal.setContentsMargins(6, 12, 6, 12)
  
-        # Colonne gauche : mission/temps + 3D + carte
         col_gauche = QVBoxLayout()
         col_gauche.setSpacing(4)
  
@@ -540,7 +538,6 @@ class PageBelle(QWidget):
         col_gauche.addWidget(self.rocket_view, stretch=1)
         col_gauche.addWidget(self.map_view,    stretch=1)
  
-        # Colonne droite : graphiques
         col_droite = QVBoxLayout()
         col_droite.setSpacing(4)
         col_droite.addWidget(self.graph_alt,     stretch=1)
