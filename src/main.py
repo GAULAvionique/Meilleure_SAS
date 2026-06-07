@@ -1,6 +1,6 @@
 import os
-from mainWindow import PageFusee
-from PySide6.QtWidgets import QMainWindow, QApplication, QTabWidget
+from mainWindow import PageDonnees, Header, PageBelle
+from PySide6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet
 from datetime import datetime
 import queue
@@ -15,20 +15,35 @@ from Logger import MyLogger
 class MyWindow(QMainWindow):
     def __init__(self, logger_sustainer, logger_booster, stop, thread):
         super().__init__()
+        obj_path = os.path.join(os.path.dirname(__file__), "assets", "fusee.obj")
+
+        self.setFixedSize(1280, 720)
 
         self.logger_booster = logger_booster
         self.logger_sustainer = logger_sustainer
         self.thread = thread
         self.stop = stop
 
-        self.page_booster = PageFusee()
-        self.page_sustainer = PageFusee()
+        self.page_booster = PageDonnees()
+        self.page_sustainer = PageDonnees()
+        self.page_belle_booster   = PageBelle(obj_path)
+        self.page_belle_sustainer = PageBelle(obj_path)
         
         self.tabs = QTabWidget()
         self.tabs.addTab(self.page_booster, "Booster")
         self.tabs.addTab(self.page_sustainer, "Sustainer")
+        self.tabs.addTab(self.page_belle_booster,   "Booster (vue)")
+        self.tabs.addTab(self.page_belle_sustainer, "Sustainer (vue)")
 
-        self.setCentralWidget(self.tabs)
+        container = QWidget()
+        layout = QVBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(Header("Ground Station"))
+        layout.addWidget(self.tabs)
+        container.setLayout(layout)
+
+        self.setCentralWidget(container)
 
     def closeEvent(self, event):
         self.stop.set()
@@ -84,5 +99,7 @@ if __name__ == "__main__":
     data_manager.signal_sustainer.connect(window.page_sustainer.update_dico)
     data_manager.signal_freq.connect(window.page_booster.update_freq)
     data_manager.signal_freq.connect(window.page_sustainer.update_freq)
+    data_manager.signal_booster.connect(window.page_belle_booster.update_dico)
+    data_manager.signal_sustainer.connect(window.page_belle_sustainer.update_dico)
 
     app.exec()

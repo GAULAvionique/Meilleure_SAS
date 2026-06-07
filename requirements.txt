@@ -3,3 +3,6 @@ qt-material
 pymavlink
 fastcrc
 builtins
+pyqtgraph
+PyOpenGL
+PyOpenGL_accelerate
