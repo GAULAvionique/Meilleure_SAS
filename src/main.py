@@ -76,8 +76,6 @@ if __name__ == "__main__":
     logger_booster = MyLogger(nom_fichier_booster)
     logger_sustainer = MyLogger(nom_fichier_sustainer)
 
-    data_manager = DataManager(logger_sustainer, logger_booster, data_queue)
-
 
     # Création du thread de la fonction receiver
 
@@ -94,6 +92,12 @@ if __name__ == "__main__":
     
     window = MyWindow(logger_booster, logger_sustainer, stop, thread)
     window.showMaximized()
+
+
+    # Création de Data Manager
+
+    data_manager = DataManager(logger_sustainer, logger_booster, data_queue)
+
 
     data_manager.signal_booster.connect(window.page_booster.update_dico)
     data_manager.signal_sustainer.connect(window.page_sustainer.update_dico)

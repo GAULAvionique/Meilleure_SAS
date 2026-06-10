@@ -15,7 +15,7 @@ class Header(QWidget):
     def __init__(self, titre="Ground Station"):
         super().__init__()
         layout = QHBoxLayout()
-        layout.setContentsMargins(12, 6, 12, 6)
+        layout.setContentsMargins(6, 3, 6, 3)
 
         label_titre = QLabel(titre)
         label_titre.setStyleSheet("font-size: 20px; font-weight: bold;")
@@ -44,7 +44,7 @@ class PageDonnees(QWidget):
         self.label_mission_state    = QLabel("--")
         self.label_battery          = QLabel("-- V")
         self.label_temp             = QLabel("-- °C")
-        self.label_pressure         = QLabel("-- hPa")
+        self.label_pressure         = QLabel("-- kPa")
         self.label_freq_msg         = QLabel("-- Hz")
 
         self.label_lat              = QLabel("-- °")
@@ -94,6 +94,7 @@ class PageDonnees(QWidget):
         self.label_flag_pyro3_conn      = QLabel("● PYRO3 CONN")
         self.label_flag_pyro4_conn      = QLabel("● PYRO4 CONN")
 
+        self.label_flag_pyros_armed         = QLabel("● PYROS ARMED")
         self.label_flag_pyro1_fired         = QLabel("● PYRO1 FIRED")
         self.label_flag_pyro2_fired         = QLabel("● PYRO2 FIRED")
         self.label_flag_pyro3_fired         = QLabel("● PYRO3 FIRED")
@@ -138,8 +139,8 @@ class PageDonnees(QWidget):
     def _groupe_etat_general(self):
         groupe = QGroupBox("Général")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Mission :"),   0, 0); layout.addWidget(self.label_mission_state, 0, 1)
         layout.addWidget(QLabel("Batterie :"),  1, 0); layout.addWidget(self.label_battery,       1, 1)
         layout.addWidget(QLabel("Temp :"),      2, 0); layout.addWidget(self.label_temp,           2, 1)
@@ -151,8 +152,8 @@ class PageDonnees(QWidget):
     def _groupe_gps(self):
         groupe = QGroupBox("GPS")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Latitude :"),   0, 0); layout.addWidget(self.label_lat,           0, 1)
         layout.addWidget(QLabel("Longitude :"),  1, 0); layout.addWidget(self.label_lon,           1, 1)
         layout.addWidget(QLabel("Altitude :"),   2, 0); layout.addWidget(self.label_gps_alt,       2, 1)
@@ -166,8 +167,8 @@ class PageDonnees(QWidget):
     def _groupe_kalman(self):
         groupe = QGroupBox("Kalman")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Altitude :"), 0, 0); layout.addWidget(self.label_kalman_z, 0, 1)
         layout.addWidget(QLabel("Vitesse :"),  1, 0); layout.addWidget(self.label_kalman_v, 1, 1)
         groupe.setLayout(layout)
@@ -176,8 +177,8 @@ class PageDonnees(QWidget):
     def _groupe_orientation(self):
         groupe = QGroupBox("Orientation")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Roll :"),  0, 0); layout.addWidget(self.label_roll,  0, 1)
         layout.addWidget(QLabel("Pitch :"), 1, 0); layout.addWidget(self.label_pitch, 1, 1)
         layout.addWidget(QLabel("Yaw :"),   2, 0); layout.addWidget(self.label_yaw,   2, 1)
@@ -187,8 +188,8 @@ class PageDonnees(QWidget):
     def _groupe_imu(self):
         groupe = QGroupBox("IMU")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Acc X :"),     0, 0); layout.addWidget(self.label_imu_acc_x,        0, 1)
         layout.addWidget(QLabel("Acc Y :"),     1, 0); layout.addWidget(self.label_imu_acc_y,        1, 1)
         layout.addWidget(QLabel("Acc Z :"),     2, 0); layout.addWidget(self.label_imu_acc_z,        2, 1)
@@ -205,8 +206,8 @@ class PageDonnees(QWidget):
     def _groupe_highg(self):
         groupe = QGroupBox("High-G")
         layout = QGridLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         layout.addWidget(QLabel("Acc X :"),     0, 0); layout.addWidget(self.label_highg_acc_x,        0, 1)
         layout.addWidget(QLabel("Acc Y :"),     1, 0); layout.addWidget(self.label_highg_acc_y,        1, 1)
         layout.addWidget(QLabel("Acc Z :"),     2, 0); layout.addWidget(self.label_highg_acc_z,        2, 1)
@@ -218,8 +219,8 @@ class PageDonnees(QWidget):
         groupe = QGroupBox("System States")
         groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout = QHBoxLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         for label in [
             self.label_flag_idefix_ok, self.label_flag_bt_ok,
             self.label_flag_flash_ok,  self.label_flag_sd_ok,
@@ -240,9 +241,10 @@ class PageDonnees(QWidget):
         groupe = QGroupBox("Event States")
         groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
         layout = QHBoxLayout()
-        layout.setContentsMargins(4, 4, 4, 0)
-        layout.setSpacing(5)
+        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setSpacing(3)
         for label in [
+            self.label_flag_pyros_armed,
             self.label_flag_pyro1_fired,     self.label_flag_pyro2_fired,
             self.label_flag_pyro3_fired,     self.label_flag_pyro4_fired,
             self.label_flag_apogee_detected, self.label_flag_main_deployed,
@@ -263,7 +265,7 @@ class PageDonnees(QWidget):
         self.label_mission_state.setText(dico["mission_state"])
         self.label_battery.setText(f"{dico['battery_mv']:.5g} V")
         self.label_temp.setText(f"{dico['temp_celsius']:.5g} °C")
-        self.label_pressure.setText(f"{dico['pressure_hpa']:.5g} hPa")
+        self.label_pressure.setText(f"{dico['pressure_pa']:.5g} kPa")
 
         self.label_lat.setText(f"{dico['lat']:.5g} °")
         self.label_lon.setText(f"{dico['lon']:.5g} °")
@@ -314,6 +316,7 @@ class PageDonnees(QWidget):
         self._set_flag(self.label_flag_pyro3_conn,     dico["FLAG_PYRO3_CONN"])
         self._set_flag(self.label_flag_pyro4_conn,     dico["FLAG_PYRO4_CONN"])
 
+        self._set_flag(self.label_flag_pyros_armed,       dico["FLAG_PYROS_ARMED"])
         self._set_flag(self.label_flag_pyro1_fired,       dico["FLAG_PYRO1_FIRED"])
         self._set_flag(self.label_flag_pyro2_fired,       dico["FLAG_PYRO2_FIRED"])
         self._set_flag(self.label_flag_pyro3_fired,       dico["FLAG_PYRO3_FIRED"])
@@ -353,67 +356,74 @@ def _load_obj(path):
                     faces.append([idx[0], idx[1], idx[2]])
                     faces.append([idx[0], idx[2], idx[3]])
     return np.array(vertices, dtype=np.float32), np.array(faces, dtype=np.int32)
- 
- 
-# ── Carte trajectoire ─────────────────────────────────────────────────────────
- 
+
+
 class TrajectoryMap(QWidget):
     def __init__(self):
         super().__init__()
         self.points = []
         self.setMinimumSize(100, 100)
- 
+        # Cache des bornes
+        self._lat_min = self._lat_max = None
+        self._lon_min = self._lon_max = None
+
     def add_point(self, lat, lon):
         if lat == 0.0 and lon == 0.0:
             return
         self.points.append((lat, lon))
+        # Mise à jour incrémentale des bornes
+        if self._lat_min is None:
+            self._lat_min = self._lat_max = lat
+            self._lon_min = self._lon_max = lon
+        else:
+            self._lat_min = min(self._lat_min, lat)
+            self._lat_max = max(self._lat_max, lat)
+            self._lon_min = min(self._lon_min, lon)
+            self._lon_max = max(self._lon_max, lon)
         self.update()
- 
+
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         w, h = self.width(), self.height()
- 
+
         painter.fillRect(0, 0, w, h, QColor(25, 25, 40))
         painter.setPen(QPen(QColor(70, 70, 90), 1))
         painter.drawRect(0, 0, w - 1, h - 1)
- 
+
         if not self.points:
             painter.setPen(QPen(QColor(120, 120, 140)))
             painter.setFont(QFont("Arial", 9))
             painter.drawText(0, 0, w, h, Qt.AlignmentFlag.AlignCenter, "En attente GPS...")
             return
- 
-        lats = [p[0] for p in self.points]
-        lons = [p[1] for p in self.points]
-        lat_range = max(max(lats) - min(lats), 0.0005)
-        lon_range = max(max(lons) - min(lons), 0.0005)
+
+        lat_range = max(self._lat_max - self._lat_min, 0.0005)
+        lon_range = max(self._lon_max - self._lon_min, 0.0005)
         pad = 20
- 
+
         def to_screen(lat, lon):
-            x = int((lon - min(lons)) / lon_range * (w - 2 * pad) + pad)
-            y = int((1 - (lat - min(lats)) / lat_range) * (h - 2 * pad) + pad)
+            x = int((lon - self._lon_min) / lon_range * (w - 2 * pad) + pad)
+            y = int((1 - (lat - self._lat_min) / lat_range) * (h - 2 * pad) + pad)
             return x, y
- 
-        if len(self.points) > 1:
+
+        # Ne dessiner que les 300 derniers points max
+        points_visibles = self.points[-300:]
+        if len(points_visibles) > 1:
             painter.setPen(QPen(QColor(100, 180, 255), 2))
-            for i in range(1, len(self.points)):
-                x1, y1 = to_screen(*self.points[i - 1])
-                x2, y2 = to_screen(*self.points[i])
+            for i in range(1, len(points_visibles)):
+                x1, y1 = to_screen(*points_visibles[i - 1])
+                x2, y2 = to_screen(*points_visibles[i])
                 painter.drawLine(x1, y1, x2, y2)
- 
+
         x, y = to_screen(*self.points[-1])
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(255, 60, 60))
         painter.drawEllipse(x - 6, y - 6, 12, 12)
- 
+
         lat, lon = self.points[-1]
         painter.setPen(QPen(QColor(200, 200, 200)))
         painter.setFont(QFont("Arial", 8))
         painter.drawText(5, 5, w - 10, 20, Qt.AlignmentFlag.AlignRight, f"{lat:.6f}, {lon:.6f}")
- 
- 
-# ── Vue 3D fusée ──────────────────────────────────────────────────────────────
  
 class RocketView3D(QWidget):
     def __init__(self, obj_path=None):
@@ -473,9 +483,6 @@ class RocketView3D(QWidget):
         self.mesh.rotate(pitch, 0, 1, 0)
         self.mesh.rotate(roll,  1, 0, 0)
  
- 
-# ── Page belle ────────────────────────────────────────────────────────────────
- 
 class PageBelle(QWidget):
     def __init__(self, obj_path=None):
         super().__init__()
@@ -484,8 +491,7 @@ class PageBelle(QWidget):
         self._alt_data  = []
         self._vel_data  = []
         self._acc_data  = []
- 
-        # ── Mission state + temps ──────────────────────────────────────────
+
         self.label_mission = QLabel("--")
         self.label_mission.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_mission.setFont(QFont("Arial", 16, QFont.Weight.Bold))
@@ -494,14 +500,11 @@ class PageBelle(QWidget):
         self.label_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_time.setFont(QFont("Arial", 13))
         self.label_time.setStyleSheet("color: #AAAAAA;")
- 
-        # ── Vue 3D ─────────────────────────────────────────────────────────
+
         self.rocket_view = RocketView3D(obj_path)
- 
-        # ── Carte ──────────────────────────────────────────────────────────
+
         self.map_view = TrajectoryMap()
- 
-        # ── Graphique altitude ─────────────────────────────────────────────
+
         self.graph_alt = pg.PlotWidget(title="Altitude Kalman (m)")
         self.graph_alt.showGrid(x=True, y=True, alpha=0.3)
         self.graph_alt.setLabel('left', 'Altitude', units='m')
@@ -509,8 +512,7 @@ class PageBelle(QWidget):
         self.curve_alt = self.graph_alt.plot(
             pen=pg.mkPen('#2196F3', width=2), name='Altitude'
         )
- 
-        # ── Graphique vitesse + accélération ───────────────────────────────
+
         self.graph_vel_acc = pg.PlotWidget(title="Vitesse & Accélération")
         self.graph_vel_acc.showGrid(x=True, y=True, alpha=0.3)
         self.graph_vel_acc.setLabel('bottom', 'Temps', units='ms')
@@ -518,7 +520,7 @@ class PageBelle(QWidget):
         self.curve_vel = self.graph_vel_acc.plot(
             pen=pg.mkPen('#4CAF50', width=2), name='Vitesse (m/s)'
         )
-        # Axe Y droit pour l'accélération
+
         self.graph_vel_acc.setLabel('left', 'Vitesse', units='m/s')
         self.curve_acc = self.graph_vel_acc.plot(
             pen=pg.mkPen('#FF9800', width=2), name='Acc. (m/s²)'
@@ -547,8 +549,7 @@ class PageBelle(QWidget):
         layout_principal.addLayout(col_droite, stretch=3)
  
         self.setLayout(layout_principal)
- 
-    # ── Slot ───────────────────────────────────────────────────────────────
+
  
     def update_dico(self, dico):
         t   = dico["time_boot_ms"]
@@ -585,36 +586,3 @@ class PageBelle(QWidget):
         secs   = (ms % 60000) // 1000
         millis = ms % 1000
         self.label_time.setText(f"{mins:02d}:{secs:02d}.{millis:03d}")
- 
-
-
-""" app = QApplication(sys.argv)
-fenetre = QWidget()
-
-
-layout_principal = QVBoxLayout()
-layout_gps = QHBoxLayout()
-layout_orientation = QHBoxLayout()
-layout_system = QHBoxLayout()
-layout_imu = QHBoxLayout()
-
-
-layout_principal.addLayout(layout_gps)
-layout_principal.addLayout(layout_orientation)
-layout_principal.addLayout(layout_system)
-layout_principal.addLayout(layout_imu)
-
-layout_gps.addWidget(QLabel("latitude"))
-layout_gps.addWidget(QLabel(str(d.dico_top["lat"])))
-layout_gps.addWidget(QLabel("longitude"))
-layout_gps.addWidget(QLabel(str(d.dico_top["lon"])))
-layout_gps.addWidget(QLabel("altitude"))
-layout_gps.addWidget(QLabel(str(d.dico_top["alt"])))
-layout_gps.addWidget(QLabel("vitesse au sol"))
-layout_gps.addWidget(QLabel(str(d.dico_top["vel"])))
-
-
-fenetre.setLayout(layout_principal)
-fenetre.setWindowTitle("Ground Station")
-fenetre.show()
-sys.exit(app.exec()) """

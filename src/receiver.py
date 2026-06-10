@@ -10,14 +10,18 @@ from config import RECV_TIMEOUT_S, RECONNECT_DELAY_S
 # Mettre à jour si le dialecte MAVLink change
 import odb_mavlink_v1 as mavlink_dialect
 
+mavutil.mavlink = mavlink_dialect
+mavutil.current_dialect = "odb_mavlink_v1"
+
 
 def _connect(serial_port, baud_rate, source_system):
+    # Laisse pymavlink gérer la nature du port (série ou UDP)
     master = mavutil.mavlink_connection(
             serial_port,
             baud=baud_rate,
             source_system=source_system,
         )
-    master.mav = mavlink_dialect.MAVLink(master, srcSystem=source_system, srcComponent=1)
+    # On active uniquement le parsing robuste sur l'instance générée automatiquement
     master.mav.robust_parsing = True
     return master
 

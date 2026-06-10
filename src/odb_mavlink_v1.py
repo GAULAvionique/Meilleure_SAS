@@ -644,8 +644,10 @@ MAV_MOUNT_MODE_SYSID_TARGET = 5
 enums["MAV_MOUNT_MODE"][5] = EnumEntry("MAV_MOUNT_MODE_SYSID_TARGET", """Gimbal tracks system with specified system ID""")
 MAV_MOUNT_MODE_HOME_LOCATION = 6
 enums["MAV_MOUNT_MODE"][6] = EnumEntry("MAV_MOUNT_MODE_HOME_LOCATION", """Gimbal tracks home position""")
-MAV_MOUNT_MODE_ENUM_END = 7
-enums["MAV_MOUNT_MODE"][7] = EnumEntry("MAV_MOUNT_MODE_ENUM_END", """""")
+MAV_MOUNT_MODE_WPNEXT_OFFSET = 7
+enums["MAV_MOUNT_MODE"][7] = EnumEntry("MAV_MOUNT_MODE_WPNEXT_OFFSET", """Gimbal tracks next waypoint location with offset""")
+MAV_MOUNT_MODE_ENUM_END = 8
+enums["MAV_MOUNT_MODE"][8] = EnumEntry("MAV_MOUNT_MODE_ENUM_END", """""")
 
 # GIMBAL_DEVICE_CAP_FLAGS
 enums["GIMBAL_DEVICE_CAP_FLAGS"] = Enum()
@@ -1266,7 +1268,7 @@ enums["MAV_CMD"][18].has_location = True
 enums["MAV_CMD"][18].param[1] = """Number of turns."""
 enums["MAV_CMD"][18].param[2] = """Leave loiter circle only when track heads towards the next waypoint (MAV_BOOL_FALSE: Leave when turns complete). Values not equal to 0 or 1 are invalid."""
 enums["MAV_CMD"][18].param[3] = """Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, else counter-clockwise"""
-enums["MAV_CMD"][18].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour."""
+enums["MAV_CMD"][18].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. NaN to use the current system default xtrack behaviour."""
 enums["MAV_CMD"][18].param[5] = """Latitude"""
 enums["MAV_CMD"][18].param[6] = """Longitude"""
 enums["MAV_CMD"][18].param[7] = """Altitude"""
@@ -1276,7 +1278,7 @@ enums["MAV_CMD"][19].has_location = True
 enums["MAV_CMD"][19].param[1] = """Loiter time (only starts once Lat, Lon and Alt is reached)."""
 enums["MAV_CMD"][19].param[2] = """Leave loiter circle only when track heading towards the next waypoint (MAV_BOOL_FALSE: Leave on time expiry). Values not equal to 0 or 1 are invalid."""
 enums["MAV_CMD"][19].param[3] = """Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, else counter-clockwise."""
-enums["MAV_CMD"][19].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour."""
+enums["MAV_CMD"][19].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. NaN to use the current system default xtrack behaviour."""
 enums["MAV_CMD"][19].param[5] = """Latitude"""
 enums["MAV_CMD"][19].param[6] = """Longitude"""
 enums["MAV_CMD"][19].param[7] = """Altitude"""
@@ -1354,7 +1356,7 @@ enums["MAV_CMD"][31].has_location = True
 enums["MAV_CMD"][31].param[1] = """Leave loiter circle only when track heading towards the next waypoint (MAV_BOOL_FALSE: Leave when altitude reached). Values not equal to 0 or 1 are invalid."""
 enums["MAV_CMD"][31].param[2] = """Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, negative counter-clockwise, 0 means no change to standard loiter."""
 enums["MAV_CMD"][31].param[3] = """Empty"""
-enums["MAV_CMD"][31].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour."""
+enums["MAV_CMD"][31].param[4] = """Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. NaN to use the current system default xtrack behaviour."""
 enums["MAV_CMD"][31].param[5] = """Latitude"""
 enums["MAV_CMD"][31].param[6] = """Longitude"""
 enums["MAV_CMD"][31].param[7] = """Altitude"""
@@ -2984,6 +2986,15 @@ enums["MAV_CMD"][42600].param[4] = """Release rate (negative to wind)."""
 enums["MAV_CMD"][42600].param[5] = """Empty."""
 enums["MAV_CMD"][42600].param[6] = """Empty."""
 enums["MAV_CMD"][42600].param[7] = """Empty."""
+MAV_CMD_GUIDED_CHANGE_HEADING = 43002
+enums["MAV_CMD"][43002] = EnumEntry("MAV_CMD_GUIDED_CHANGE_HEADING", """Change to target direction at a given rate, overriding previous heading/s. This slews the vehicle at a controllable rate between its previous heading and the new one.""")
+enums["MAV_CMD"][43002].param[1] = """Course-over-ground or raw vehicle heading."""
+enums["MAV_CMD"][43002].param[2] = """Target heading."""
+enums["MAV_CMD"][43002].param[3] = """Maximum centripetal acceleration, i.e. rate of change toward new heading."""
+enums["MAV_CMD"][43002].param[4] = """Reserved (default:0)"""
+enums["MAV_CMD"][43002].param[5] = """Reserved (default:0)"""
+enums["MAV_CMD"][43002].param[6] = """Reserved (default:0)"""
+enums["MAV_CMD"][43002].param[7] = """Reserved (default:0)"""
 MAV_CMD_EXTERNAL_POSITION_ESTIMATE = 43003
 enums["MAV_CMD"][43003] = EnumEntry("MAV_CMD_EXTERNAL_POSITION_ESTIMATE", """Provide an external position estimate for use when dead-reckoning. This is meant to be used for occasional position resets that may be provided by a external system such as a remote pilot using landmarks over a video link.""")
 enums["MAV_CMD"][43003].has_location = True
@@ -3709,6 +3720,18 @@ enums["SPEED_TYPE"][3] = EnumEntry("SPEED_TYPE_DESCENT_SPEED", """Descent speed"
 SPEED_TYPE_ENUM_END = 4
 enums["SPEED_TYPE"][4] = EnumEntry("SPEED_TYPE_ENUM_END", """""")
 
+# HEADING_TYPE
+enums["HEADING_TYPE"] = Enum()
+enums["HEADING_TYPE"].bitmask = False
+HEADING_TYPE_COURSE_OVER_GROUND = 0
+enums["HEADING_TYPE"][0] = EnumEntry("HEADING_TYPE_COURSE_OVER_GROUND", """Course over ground.""")
+HEADING_TYPE_HEADING = 1
+enums["HEADING_TYPE"][1] = EnumEntry("HEADING_TYPE_HEADING", """Raw vehicle heading.""")
+HEADING_TYPE_DEFAULT = 2
+enums["HEADING_TYPE"][2] = EnumEntry("HEADING_TYPE_DEFAULT", """Default heading.""")
+HEADING_TYPE_ENUM_END = 3
+enums["HEADING_TYPE"][3] = EnumEntry("HEADING_TYPE_ENUM_END", """""")
+
 # ESTIMATOR_STATUS_FLAGS
 enums["ESTIMATOR_STATUS_FLAGS"] = Enum()
 enums["ESTIMATOR_STATUS_FLAGS"].bitmask = True
@@ -3950,8 +3973,10 @@ VIDEO_STREAM_TYPE_TCP_MPEG = 2
 enums["VIDEO_STREAM_TYPE"][2] = EnumEntry("VIDEO_STREAM_TYPE_TCP_MPEG", """Stream is MPEG on TCP""")
 VIDEO_STREAM_TYPE_MPEG_TS = 3
 enums["VIDEO_STREAM_TYPE"][3] = EnumEntry("VIDEO_STREAM_TYPE_MPEG_TS", """Stream is MPEG TS (URI gives the port number)""")
-VIDEO_STREAM_TYPE_ENUM_END = 4
-enums["VIDEO_STREAM_TYPE"][4] = EnumEntry("VIDEO_STREAM_TYPE_ENUM_END", """""")
+VIDEO_STREAM_TYPE_WHEP = 4
+enums["VIDEO_STREAM_TYPE"][4] = EnumEntry("VIDEO_STREAM_TYPE_WHEP", """Stream is WHEP (WebRTC-HTTP Egress Protocol)""")
+VIDEO_STREAM_TYPE_ENUM_END = 5
+enums["VIDEO_STREAM_TYPE"][5] = EnumEntry("VIDEO_STREAM_TYPE_ENUM_END", """""")
 
 # VIDEO_STREAM_ENCODING
 enums["VIDEO_STREAM_ENCODING"] = Enum()
@@ -5032,12 +5057,18 @@ MAG_CAL_SUCCESS = 4
 enums["MAG_CAL_STATUS"][4] = EnumEntry("MAG_CAL_SUCCESS", """""")
 MAG_CAL_FAILED = 5
 enums["MAG_CAL_STATUS"][5] = EnumEntry("MAG_CAL_FAILED", """""")
-MAG_CAL_BAD_ORIENTATION = 6
-enums["MAG_CAL_STATUS"][6] = EnumEntry("MAG_CAL_BAD_ORIENTATION", """""")
-MAG_CAL_BAD_RADIUS = 7
-enums["MAG_CAL_STATUS"][7] = EnumEntry("MAG_CAL_BAD_RADIUS", """""")
-MAG_CAL_STATUS_ENUM_END = 8
-enums["MAG_CAL_STATUS"][8] = EnumEntry("MAG_CAL_STATUS_ENUM_END", """""")
+MAG_CAL_FAILED_ORIENTATION = 6
+enums["MAG_CAL_STATUS"][6] = EnumEntry("MAG_CAL_FAILED_ORIENTATION", """Compass calibration failed: the vehicle orientation is outside the required tolerance.""")
+MAG_CAL_FAILED_RADIUS = 7
+enums["MAG_CAL_STATUS"][7] = EnumEntry("MAG_CAL_FAILED_RADIUS", """Compass calibration failed: the radius of the fitted sphere is unrealistically small or large.""")
+MAG_CAL_FAILED_OFFSETS = 8
+enums["MAG_CAL_STATUS"][8] = EnumEntry("MAG_CAL_FAILED_OFFSETS", """Compass calibration failed: offset magnitude too large.""")
+MAG_CAL_FAILED_DIAG_SCALING = 9
+enums["MAG_CAL_STATUS"][9] = EnumEntry("MAG_CAL_FAILED_DIAG_SCALING", """Compass calibration failed: diagonal or off-diagonal scaling values out of valid range.""")
+MAG_CAL_FAILED_RESIDUALS_HIGH = 10
+enums["MAG_CAL_STATUS"][10] = EnumEntry("MAG_CAL_FAILED_RESIDUALS_HIGH", """Compass calibration failed: fitness (RMS residual) exceeds tolerance.""")
+MAG_CAL_STATUS_ENUM_END = 11
+enums["MAG_CAL_STATUS"][11] = EnumEntry("MAG_CAL_STATUS_ENUM_END", """""")
 
 # MAV_EVENT_ERROR_REASON
 enums["MAV_EVENT_ERROR_REASON"] = Enum()
@@ -5200,6 +5231,8 @@ MAV_FTP_OPCODE_CALCFILECRC = 14
 enums["MAV_FTP_OPCODE"][14] = EnumEntry("MAV_FTP_OPCODE_CALCFILECRC", """CalcFileCRC32: Calculate CRC32 for file at path""")
 MAV_FTP_OPCODE_BURSTREADFILE = 15
 enums["MAV_FTP_OPCODE"][15] = EnumEntry("MAV_FTP_OPCODE_BURSTREADFILE", """BurstReadFile: Burst download session file""")
+MAV_FTP_OPCODE_LISTDIRECTORYWITHTIME = 16
+enums["MAV_FTP_OPCODE"][16] = EnumEntry("MAV_FTP_OPCODE_LISTDIRECTORYWITHTIME", """ListDirectoryWithTime: List files and directories, along with last-modification timestamps, in path from offset. This is the same as ListDirectory except for the addition of timestamps. Servers that do not support this opcode respond with a NAK (MAV_FTP_ERR_UNKNOWNCOMMAND).""")
 MAV_FTP_OPCODE_ACK = 128
 enums["MAV_FTP_OPCODE"][128] = EnumEntry("MAV_FTP_OPCODE_ACK", """ACK: ACK response""")
 MAV_FTP_OPCODE_NAK = 129
@@ -6294,27 +6327,27 @@ MAVLINK_MSG_ID_HEARTBEAT = 0
 
 class MAVLink_rocket_telemetry_message(MAVLink_message):
     """
-    Complete telemetry data for the rocket.
+    ODB Rocket Telemetry.
     """
 
     id = MAVLINK_MSG_ID_ROCKET_TELEMETRY
     msgname = "ROCKET_TELEMETRY"
-    fieldnames = ["time_boot_ms", "system_states", "event_states", "mission_state", "battery_mv", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_hpa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "gps_fix", "lat", "lon", "gps_alt", "vel", "cog", "satellites_nb", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v"]
-    ordered_fieldnames = ["time_boot_ms", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_hpa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "lat", "lon", "gps_alt", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v", "system_states", "battery_mv", "vel", "cog", "event_states", "mission_state", "gps_fix", "satellites_nb"]
-    fieldtypes = ["uint32_t", "uint16_t", "uint8_t", "uint8_t", "uint16_t", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "uint8_t", "int32_t", "int32_t", "int32_t", "uint16_t", "uint16_t", "uint8_t", "float", "float", "float", "float"]
+    fieldnames = ["time_boot_ms", "system_states", "event_states", "mission_state", "battery_mv", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_pa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "gps_fix", "lat", "lon", "gps_alt", "vel", "cog", "satellites_nb", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v"]
+    ordered_fieldnames = ["time_boot_ms", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_pa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "lat", "lon", "gps_alt", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v", "system_states", "event_states", "battery_mv", "vel", "cog", "mission_state", "gps_fix", "satellites_nb"]
+    fieldtypes = ["uint32_t", "uint16_t", "uint16_t", "uint8_t", "uint16_t", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "uint8_t", "int32_t", "int32_t", "int32_t", "uint16_t", "uint16_t", "uint8_t", "float", "float", "float", "float"]
     fielddisplays_by_name: Dict[str, str] = {}
     fieldenums_by_name: Dict[str, str] = {}
-    fieldunits_by_name: Dict[str, str] = {"time_boot_ms": "ms", "battery_mv": "mV", "roll": "deg", "pitch": "deg", "yaw": "deg", "imu_acc_x": "m/s/s", "imu_acc_y": "m/s/s", "imu_acc_z": "m/s/s", "imu_gyro_x": "deg/s", "imu_gyro_y": "deg/s", "imu_gyro_z": "deg/s", "imu_mag_x": "uT", "imu_mag_y": "uT", "imu_mag_z": "uT", "altitude_msl_m": "m", "pressure_hpa": "hPa", "temp_celsius": "degC", "highg_acc_x": "m/s/s", "highg_acc_y": "m/s/s", "highg_acc_z": "m/s/s", "lat": "degE7", "lon": "degE7", "gps_alt": "mm", "vel": "cm/s", "cog": "cdeg", "imu_acc_vertical": "m/s/s", "highg_acc_vertical": "m/s/s", "kalman_z": "m", "kalman_v": "m/s"}
-    native_format = bytearray(b"<IffffffffffffffffffiiiffffHHHHBBBB")
-    orders = [0, 26, 30, 31, 27, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 32, 19, 20, 21, 28, 29, 33, 22, 23, 24, 25]
+    fieldunits_by_name: Dict[str, str] = {"time_boot_ms": "ms", "battery_mv": "mV", "roll": "cdeg", "pitch": "cdeg", "yaw": "cdeg", "imu_acc_x": "cm/s/s", "imu_acc_y": "cm/s/s", "imu_acc_z": "cm/s/s", "imu_gyro_x": "cdeg/s", "imu_gyro_y": "cdeg/s", "imu_gyro_z": "cdeg/s", "imu_mag_x": "cuT", "imu_mag_y": "cuT", "imu_mag_z": "cuT", "altitude_msl_m": "cm", "pressure_pa": "hPa", "temp_celsius": "cdegC", "highg_acc_x": "cm/s/s", "highg_acc_y": "cm/s/s", "highg_acc_z": "cm/s/s", "lat": "degE7", "lon": "degE7", "gps_alt": "mm", "vel": "cm/s", "cog": "cdeg", "imu_acc_vertical": "cm/s/s", "highg_acc_vertical": "cm/s/s", "kalman_z": "cm", "kalman_v": "cm/s"}
+    native_format = bytearray(b"<IffffffffffffffffffiiiffffHHHHHBBB")
+    orders = [0, 26, 27, 31, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 32, 19, 20, 21, 29, 30, 33, 22, 23, 24, 25]
     lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    crc_extra = 18
-    unpacker = struct.Struct("<IffffffffffffffffffiiiffffHHHHBBBB")
+    crc_extra = 157
+    unpacker = struct.Struct("<IffffffffffffffffffiiiffffHHHHHBBB")
     instance_field = None
     instance_offset = -1
 
-    def __init__(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_hpa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float):
+    def __init__(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float):
         MAVLink_message.__init__(self, MAVLink_rocket_telemetry_message.id, MAVLink_rocket_telemetry_message.msgname)
         self._fieldnames = MAVLink_rocket_telemetry_message.fieldnames
         self._instance_field = MAVLink_rocket_telemetry_message.instance_field
@@ -6337,7 +6370,7 @@ class MAVLink_rocket_telemetry_message(MAVLink_message):
         self.imu_mag_y = imu_mag_y
         self.imu_mag_z = imu_mag_z
         self.altitude_msl_m = altitude_msl_m
-        self.pressure_hpa = pressure_hpa
+        self.pressure_pa = pressure_pa
         self.temp_celsius = temp_celsius
         self.highg_acc_x = highg_acc_x
         self.highg_acc_y = highg_acc_y
@@ -6355,7 +6388,7 @@ class MAVLink_rocket_telemetry_message(MAVLink_message):
         self.kalman_v = kalman_v
 
     def pack(self, mav: "MAVLink", force_mavlink1: bool = False) -> bytes:
-        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.time_boot_ms, self.roll, self.pitch, self.yaw, self.imu_acc_x, self.imu_acc_y, self.imu_acc_z, self.imu_gyro_x, self.imu_gyro_y, self.imu_gyro_z, self.imu_mag_x, self.imu_mag_y, self.imu_mag_z, self.altitude_msl_m, self.pressure_hpa, self.temp_celsius, self.highg_acc_x, self.highg_acc_y, self.highg_acc_z, self.lat, self.lon, self.gps_alt, self.imu_acc_vertical, self.highg_acc_vertical, self.kalman_z, self.kalman_v, self.system_states, self.battery_mv, self.vel, self.cog, self.event_states, self.mission_state, self.gps_fix, self.satellites_nb), force_mavlink1=force_mavlink1)
+        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.time_boot_ms, self.roll, self.pitch, self.yaw, self.imu_acc_x, self.imu_acc_y, self.imu_acc_z, self.imu_gyro_x, self.imu_gyro_y, self.imu_gyro_z, self.imu_mag_x, self.imu_mag_y, self.imu_mag_z, self.altitude_msl_m, self.pressure_pa, self.temp_celsius, self.highg_acc_x, self.highg_acc_y, self.highg_acc_z, self.lat, self.lon, self.gps_alt, self.imu_acc_vertical, self.highg_acc_vertical, self.kalman_z, self.kalman_v, self.system_states, self.event_states, self.battery_mv, self.vel, self.cog, self.mission_state, self.gps_fix, self.satellites_nb), force_mavlink1=force_mavlink1)
 
 
 # Define name on the class for backwards compatibility (it is now msgname).
@@ -6682,7 +6715,7 @@ setattr(MAVLink_link_node_status_message, "name", mavlink_msg_deprecated_name_pr
 
 class MAVLink_set_mode_message(MAVLink_message):
     """
-    Set the system mode, as defined by enum MAV_MODE. There is no
+    Set the system mode, as defined by enum MAV_MODE_FLAG. There is no
     target component id as the mode is by definition for the overall
     aircraft, not only for one component.
     """
@@ -6692,8 +6725,8 @@ class MAVLink_set_mode_message(MAVLink_message):
     fieldnames = ["target_system", "base_mode", "custom_mode"]
     ordered_fieldnames = ["custom_mode", "target_system", "base_mode"]
     fieldtypes = ["uint8_t", "uint8_t", "uint32_t"]
-    fielddisplays_by_name: Dict[str, str] = {}
-    fieldenums_by_name: Dict[str, str] = {"base_mode": "MAV_MODE"}
+    fielddisplays_by_name: Dict[str, str] = {"base_mode": "bitmask"}
+    fieldenums_by_name: Dict[str, str] = {"base_mode": "MAV_MODE_FLAG"}
     fieldunits_by_name: Dict[str, str] = {}
     native_format = bytearray(b"<IBB")
     orders = [1, 2, 0]
@@ -15269,27 +15302,32 @@ setattr(MAVLink_trajectory_representation_bezier_message, "name", mavlink_msg_de
 
 class MAVLink_cellular_status_message(MAVLink_message):
     """
-    Report current used cellular network status
+    Cellular network status as reported by a particular modem.
+    This is primarily intended for logging, but a GCS may choose to
+    display link_tx_rate and link_rx_rate.                  Note that
+    a value of 0 in the id field indicates that the sender does not
+    support reporting of multiple modems.         Message data should
+    be from a single modem, but that is not guaranteed.
     """
 
     id = MAVLINK_MSG_ID_CELLULAR_STATUS
     msgname = "CELLULAR_STATUS"
-    fieldnames = ["status", "failure_reason", "type", "quality", "mcc", "mnc", "lac"]
-    ordered_fieldnames = ["mcc", "mnc", "lac", "status", "failure_reason", "type", "quality"]
-    fieldtypes = ["uint8_t", "uint8_t", "uint8_t", "uint8_t", "uint16_t", "uint16_t", "uint16_t"]
+    fieldnames = ["status", "failure_reason", "type", "quality", "mcc", "mnc", "lac", "id", "link_tx_rate", "link_rx_rate", "cell_tower_id", "band_number", "band_frequency", "channel_number", "rx_level", "tx_level", "rx_quality", "sinr"]
+    ordered_fieldnames = ["mcc", "mnc", "lac", "status", "failure_reason", "type", "quality", "id", "link_tx_rate", "link_rx_rate", "cell_tower_id", "band_number", "band_frequency", "channel_number", "rx_level", "tx_level", "rx_quality", "sinr"]
+    fieldtypes = ["uint8_t", "uint8_t", "uint8_t", "uint8_t", "uint16_t", "uint16_t", "uint16_t", "uint8_t", "uint32_t", "uint32_t", "char", "uint8_t", "float", "uint32_t", "float", "float", "float", "float"]
     fielddisplays_by_name: Dict[str, str] = {}
     fieldenums_by_name: Dict[str, str] = {"status": "CELLULAR_STATUS_FLAG", "failure_reason": "CELLULAR_NETWORK_FAILED_REASON", "type": "CELLULAR_NETWORK_RADIO_TYPE"}
-    fieldunits_by_name: Dict[str, str] = {}
-    native_format = bytearray(b"<HHHBBBB")
-    orders = [3, 4, 5, 6, 0, 1, 2]
-    lengths = [1, 1, 1, 1, 1, 1, 1]
-    array_lengths = [0, 0, 0, 0, 0, 0, 0]
+    fieldunits_by_name: Dict[str, str] = {"link_tx_rate": "KiB/s", "link_rx_rate": "KiB/s", "band_frequency": "MHz", "rx_level": "dBm", "tx_level": "dBm", "rx_quality": "dBm", "sinr": "dB"}
+    native_format = bytearray(b"<HHHBBBBBIIcBfIffff")
+    orders = [3, 4, 5, 6, 0, 1, 2, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0]
     crc_extra = 72
-    unpacker = struct.Struct("<HHHBBBB")
-    instance_field = None
-    instance_offset = -1
+    unpacker = struct.Struct("<HHHBBBBBII9sBfIffff")
+    instance_field = "id"
+    instance_offset = 10
 
-    def __init__(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int):
+    def __init__(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int, id: int = 0, link_tx_rate: int = 0, link_rx_rate: int = 0, cell_tower_id: bytes = b"", band_number: int = 0, band_frequency: float = 0, channel_number: int = 0, rx_level: float = 0, tx_level: float = 0, rx_quality: float = 0, sinr: float = 0):
         MAVLink_message.__init__(self, MAVLink_cellular_status_message.id, MAVLink_cellular_status_message.msgname)
         self._fieldnames = MAVLink_cellular_status_message.fieldnames
         self._instance_field = MAVLink_cellular_status_message.instance_field
@@ -15301,9 +15339,21 @@ class MAVLink_cellular_status_message(MAVLink_message):
         self.mcc = mcc
         self.mnc = mnc
         self.lac = lac
+        self.id = id
+        self.link_tx_rate = link_tx_rate
+        self.link_rx_rate = link_rx_rate
+        self._cell_tower_id_raw = cell_tower_id
+        self.cell_tower_id = cell_tower_id.split(b"\x00", 1)[0].decode("ascii", errors="replace")
+        self.band_number = band_number
+        self.band_frequency = band_frequency
+        self.channel_number = channel_number
+        self.rx_level = rx_level
+        self.tx_level = tx_level
+        self.rx_quality = rx_quality
+        self.sinr = sinr
 
     def pack(self, mav: "MAVLink", force_mavlink1: bool = False) -> bytes:
-        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.mcc, self.mnc, self.lac, self.status, self.failure_reason, self.type, self.quality), force_mavlink1=force_mavlink1)
+        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.mcc, self.mnc, self.lac, self.status, self.failure_reason, self.type, self.quality, self.id, self.link_tx_rate, self.link_rx_rate, self._cell_tower_id_raw, self.band_number, self.band_frequency, self.channel_number, self.rx_level, self.tx_level, self.rx_quality, self.sinr), force_mavlink1=force_mavlink1)
 
 
 # Define name on the class for backwards compatibility (it is now msgname).
@@ -16433,7 +16483,8 @@ setattr(MAVLink_component_metadata_message, "name", mavlink_msg_deprecated_name_
 
 class MAVLink_play_tune_v2_message(MAVLink_message):
     """
-    Play vehicle tone/tune (buzzer). Supersedes message PLAY_TUNE.
+    Play vehicle tone/tune (buzzer). Supported tunes can be determined
+    using SUPPORTED_TUNES. Supersedes message PLAY_TUNE.
     """
 
     id = MAVLINK_MSG_ID_PLAY_TUNE_V2
@@ -16475,8 +16526,8 @@ setattr(MAVLink_play_tune_v2_message, "name", mavlink_msg_deprecated_name_proper
 
 class MAVLink_supported_tunes_message(MAVLink_message):
     """
-    Tune formats supported by vehicle. This should be emitted as
-    response to MAV_CMD_REQUEST_MESSAGE.
+    Tune formats supported by vehicle, i.e. via PLAY_TUNE_V2. This
+    should be emitted as response to MAV_CMD_REQUEST_MESSAGE.
     """
 
     id = MAVLINK_MSG_ID_SUPPORTED_TUNES
@@ -18236,89 +18287,89 @@ class MAVLink(object):
         m._header = MAVLink_header(msgId, incompat_flags, compat_flags, mlen, seq, srcSystem, srcComponent)
         return m
 
-    def rocket_telemetry_encode(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_hpa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float) -> MAVLink_rocket_telemetry_message:
+    def rocket_telemetry_encode(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float) -> MAVLink_rocket_telemetry_message:
         """
-        Complete telemetry data for the rocket.
+        ODB Rocket Telemetry.
 
-        time_boot_ms              : Timestamp since system boot in milliseconds. [ms] (type:uint32_t)
-        system_states             : System component health flags. (type:uint16_t)
-        event_states              : Flight events such as pyros and apogee. (type:uint8_t)
-        mission_state             : Mission state linked with the FSM. (type:uint8_t)
-        battery_mv                : Main battery voltage in millivolts. [mV] (type:uint16_t)
-        roll                      : Roll angle in degrees. [deg] (type:float)
-        pitch                     : Pitch angle in degrees. [deg] (type:float)
-        yaw                       : Yaw angle in degrees between -180 and 180. [deg] (type:float)
-        imu_acc_x                 : IMU acceleration X in m/s^2. [m/s/s] (type:float)
-        imu_acc_y                 : IMU acceleration Y in m/s^2. [m/s/s] (type:float)
-        imu_acc_z                 : IMU acceleration Z in m/s^2. [m/s/s] (type:float)
-        imu_gyro_x                : IMU angular rate X in deg/s. [deg/s] (type:float)
-        imu_gyro_y                : IMU angular rate Y in deg/s. [deg/s] (type:float)
-        imu_gyro_z                : IMU angular rate Z in deg/s. [deg/s] (type:float)
-        imu_mag_x                 : IMU magnetometer X in uT. [uT] (type:float)
-        imu_mag_y                 : IMU magnetometer Y in uT. [uT] (type:float)
-        imu_mag_z                 : IMU magnetometer Z in uT. [uT] (type:float)
-        altitude_msl_m            : Altitude in meters from barometer referenced to sea level. [m] (type:float)
-        pressure_hpa              : Atmospheric pressure in hectopascals. [hPa] (type:float)
-        temp_celsius              : Board or environment temperature in Celsius. [degC] (type:float)
-        highg_acc_x               : High-G acceleration X in m/s^2. [m/s/s] (type:float)
-        highg_acc_y               : High-G acceleration Y in m/s^2. [m/s/s] (type:float)
-        highg_acc_z               : High-G acceleration Z in m/s^2. [m/s/s] (type:float)
-        gps_fix                   : GPS fix type. (type:uint8_t)
-        lat                       : Latitude in degrees times 1E7. [degE7] (type:int32_t)
-        lon                       : Longitude in degrees times 1E7. [degE7] (type:int32_t)
-        gps_alt                   : GPS altitude MSL in millimeters. [mm] (type:int32_t)
-        vel                       : Ground speed in cm/s. [cm/s] (type:uint16_t)
-        cog                       : Course over ground in cdeg. [cdeg] (type:uint16_t)
-        satellites_nb             : Number of satellites. (type:uint8_t)
-        imu_acc_vertical          : Vertical acceleration in the world frame from the IMU. [m/s/s] (type:float)
-        highg_acc_vertical        : Vertical acceleration in the world frame from the high-G accelerometer. [m/s/s] (type:float)
-        kalman_z                  : Filtered altitude from the Kalman filter. [m] (type:float)
-        kalman_v                  : Filtered velocity from the Kalman filter. [m/s] (type:float)
-
-        """
-        return MAVLink_rocket_telemetry_message(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_hpa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v)
-
-    def rocket_telemetry_send(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_hpa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float, force_mavlink1: bool = False) -> None:
-        """
-        Complete telemetry data for the rocket.
-
-        time_boot_ms              : Timestamp since system boot in milliseconds. [ms] (type:uint32_t)
-        system_states             : System component health flags. (type:uint16_t)
-        event_states              : Flight events such as pyros and apogee. (type:uint8_t)
-        mission_state             : Mission state linked with the FSM. (type:uint8_t)
-        battery_mv                : Main battery voltage in millivolts. [mV] (type:uint16_t)
-        roll                      : Roll angle in degrees. [deg] (type:float)
-        pitch                     : Pitch angle in degrees. [deg] (type:float)
-        yaw                       : Yaw angle in degrees between -180 and 180. [deg] (type:float)
-        imu_acc_x                 : IMU acceleration X in m/s^2. [m/s/s] (type:float)
-        imu_acc_y                 : IMU acceleration Y in m/s^2. [m/s/s] (type:float)
-        imu_acc_z                 : IMU acceleration Z in m/s^2. [m/s/s] (type:float)
-        imu_gyro_x                : IMU angular rate X in deg/s. [deg/s] (type:float)
-        imu_gyro_y                : IMU angular rate Y in deg/s. [deg/s] (type:float)
-        imu_gyro_z                : IMU angular rate Z in deg/s. [deg/s] (type:float)
-        imu_mag_x                 : IMU magnetometer X in uT. [uT] (type:float)
-        imu_mag_y                 : IMU magnetometer Y in uT. [uT] (type:float)
-        imu_mag_z                 : IMU magnetometer Z in uT. [uT] (type:float)
-        altitude_msl_m            : Altitude in meters from barometer referenced to sea level. [m] (type:float)
-        pressure_hpa              : Atmospheric pressure in hectopascals. [hPa] (type:float)
-        temp_celsius              : Board or environment temperature in Celsius. [degC] (type:float)
-        highg_acc_x               : High-G acceleration X in m/s^2. [m/s/s] (type:float)
-        highg_acc_y               : High-G acceleration Y in m/s^2. [m/s/s] (type:float)
-        highg_acc_z               : High-G acceleration Z in m/s^2. [m/s/s] (type:float)
-        gps_fix                   : GPS fix type. (type:uint8_t)
-        lat                       : Latitude in degrees times 1E7. [degE7] (type:int32_t)
-        lon                       : Longitude in degrees times 1E7. [degE7] (type:int32_t)
-        gps_alt                   : GPS altitude MSL in millimeters. [mm] (type:int32_t)
-        vel                       : Ground speed in cm/s. [cm/s] (type:uint16_t)
-        cog                       : Course over ground in cdeg. [cdeg] (type:uint16_t)
-        satellites_nb             : Number of satellites. (type:uint8_t)
-        imu_acc_vertical          : Vertical acceleration in the world frame from the IMU. [m/s/s] (type:float)
-        highg_acc_vertical        : Vertical acceleration in the world frame from the high-G accelerometer. [m/s/s] (type:float)
-        kalman_z                  : Filtered altitude from the Kalman filter. [m] (type:float)
-        kalman_v                  : Filtered velocity from the Kalman filter. [m/s] (type:float)
+        time_boot_ms              : Timestamp in milliseconds. [ms] (type:uint32_t)
+        system_states             : Current system state bitfield. (type:uint16_t)
+        event_states              : Current events states (pyros fired, apogee, etc.). (type:uint16_t)
+        mission_state             : Mission state. (type:uint8_t)
+        battery_mv                : Battery voltage in millivolts. [mV] (type:uint16_t)
+        roll                      : Roll angle in centi-degrees. [cdeg] (type:float)
+        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:float)
+        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:float)
+        imu_acc_x                 : IMU Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
+        imu_acc_y                 : IMU Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
+        imu_acc_z                 : IMU Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
+        imu_gyro_x                : IMU Gyro X in centi-degrees per second. [cdeg/s] (type:float)
+        imu_gyro_y                : IMU Gyro Y in centi-degrees per second. [cdeg/s] (type:float)
+        imu_gyro_z                : IMU Gyro Z in centi-degrees per second. [cdeg/s] (type:float)
+        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:float)
+        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:float)
+        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:float)
+        altitude_msl_m            : Altitude (MSL) from barometer in centimeters. [cm] (type:float)
+        pressure_pa               : Pressure in hectopascals. [hPa] (type:float)
+        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:float)
+        highg_acc_x               : High-G Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_y               : High-G Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_z               : High-G Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
+        gps_fix                   : GPS fix type (0: No fix, 1: Active fix, etc.). (type:uint8_t)
+        lat                       : Latitude in degrees * 1E7. [degE7] (type:int32_t)
+        lon                       : Longitude in degrees * 1E7. [degE7] (type:int32_t)
+        gps_alt                   : Altitude (MSL) from GPS in millimeters. [mm] (type:int32_t)
+        vel                       : Ground speed in centimeters per second. [cm/s] (type:uint16_t)
+        cog                       : Course over ground in centi-degrees. [cdeg] (type:uint16_t)
+        satellites_nb             : Number of visible satellites. (type:uint8_t)
+        imu_acc_vertical          : Vertical acceleration from IMU in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_vertical        : Vertical acceleration from High-G in centimeters per second squared. [cm/s/s] (type:float)
+        kalman_z                  : Filtered altitude from Kalman filter in centimeters. [cm] (type:float)
+        kalman_v                  : Filtered velocity from Kalman filter in centimeters per second. [cm/s] (type:float)
 
         """
-        self.send(self.rocket_telemetry_encode(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_hpa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v), force_mavlink1=force_mavlink1)
+        return MAVLink_rocket_telemetry_message(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_pa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v)
+
+    def rocket_telemetry_send(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float, force_mavlink1: bool = False) -> None:
+        """
+        ODB Rocket Telemetry.
+
+        time_boot_ms              : Timestamp in milliseconds. [ms] (type:uint32_t)
+        system_states             : Current system state bitfield. (type:uint16_t)
+        event_states              : Current events states (pyros fired, apogee, etc.). (type:uint16_t)
+        mission_state             : Mission state. (type:uint8_t)
+        battery_mv                : Battery voltage in millivolts. [mV] (type:uint16_t)
+        roll                      : Roll angle in centi-degrees. [cdeg] (type:float)
+        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:float)
+        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:float)
+        imu_acc_x                 : IMU Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
+        imu_acc_y                 : IMU Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
+        imu_acc_z                 : IMU Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
+        imu_gyro_x                : IMU Gyro X in centi-degrees per second. [cdeg/s] (type:float)
+        imu_gyro_y                : IMU Gyro Y in centi-degrees per second. [cdeg/s] (type:float)
+        imu_gyro_z                : IMU Gyro Z in centi-degrees per second. [cdeg/s] (type:float)
+        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:float)
+        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:float)
+        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:float)
+        altitude_msl_m            : Altitude (MSL) from barometer in centimeters. [cm] (type:float)
+        pressure_pa               : Pressure in hectopascals. [hPa] (type:float)
+        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:float)
+        highg_acc_x               : High-G Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_y               : High-G Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_z               : High-G Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
+        gps_fix                   : GPS fix type (0: No fix, 1: Active fix, etc.). (type:uint8_t)
+        lat                       : Latitude in degrees * 1E7. [degE7] (type:int32_t)
+        lon                       : Longitude in degrees * 1E7. [degE7] (type:int32_t)
+        gps_alt                   : Altitude (MSL) from GPS in millimeters. [mm] (type:int32_t)
+        vel                       : Ground speed in centimeters per second. [cm/s] (type:uint16_t)
+        cog                       : Course over ground in centi-degrees. [cdeg] (type:uint16_t)
+        satellites_nb             : Number of visible satellites. (type:uint8_t)
+        imu_acc_vertical          : Vertical acceleration from IMU in centimeters per second squared. [cm/s/s] (type:float)
+        highg_acc_vertical        : Vertical acceleration from High-G in centimeters per second squared. [cm/s/s] (type:float)
+        kalman_z                  : Filtered altitude from Kalman filter in centimeters. [cm] (type:float)
+        kalman_v                  : Filtered velocity from Kalman filter in centimeters per second. [cm/s] (type:float)
+
+        """
+        self.send(self.rocket_telemetry_encode(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_pa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v), force_mavlink1=force_mavlink1)
 
     def sys_status_encode(self, onboard_control_sensors_present: int, onboard_control_sensors_enabled: int, onboard_control_sensors_health: int, load: int, voltage_battery: int, current_battery: int, battery_remaining: int, drop_rate_comm: int, errors_comm: int, errors_count1: int, errors_count2: int, errors_count3: int, errors_count4: int, onboard_control_sensors_present_extended: int = 0, onboard_control_sensors_enabled_extended: int = 0, onboard_control_sensors_health_extended: int = 0) -> MAVLink_sys_status_message:
         """
@@ -18330,9 +18381,9 @@ class MAVLink(object):
         onboard_control_sensors_enabled        : Bitmap showing which onboard controllers and sensors are enabled:  Value of 0: not enabled. Value of 1: enabled. (type:uint32_t, values:MAV_SYS_STATUS_SENSOR)
         onboard_control_sensors_health        : Bitmap showing which onboard controllers and sensors have an error (or are operational). Value of 0: error. Value of 1: healthy. (type:uint32_t, values:MAV_SYS_STATUS_SENSOR)
         load                      : Maximum usage in percent of the mainloop time. Values: [0-1000] - should always be below 1000 [d%] (type:uint16_t)
-        voltage_battery           : Battery voltage, UINT16_MAX: Voltage not sent by autopilot [mV] (type:uint16_t)
-        current_battery           : Battery current, -1: Current not sent by autopilot [cA] (type:int16_t)
-        battery_remaining         : Battery energy remaining, -1: Battery remaining energy not sent by autopilot [%] (type:int8_t)
+        voltage_battery           : Battery voltage, UINT16_MAX: Voltage not sent by autopilot. Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [mV] (type:uint16_t)
+        current_battery           : Battery current, -1: Current not sent by autopilot. Value may overflow/rollover for very high currents (> 327.67A). Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [cA] (type:int16_t)
+        battery_remaining         : Battery energy remaining, -1: Battery remaining energy not sent by autopilot. Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [%] (type:int8_t)
         drop_rate_comm            : Communication drop rate, (UART, I2C, SPI, CAN), dropped packets on all links (packets that were corrupted on reception on the MAV) [c%] (type:uint16_t)
         errors_comm               : Communication errors (UART, I2C, SPI, CAN), dropped packets on all links (packets that were corrupted on reception on the MAV) (type:uint16_t)
         errors_count1             : Autopilot-specific errors (type:uint16_t)
@@ -18356,9 +18407,9 @@ class MAVLink(object):
         onboard_control_sensors_enabled        : Bitmap showing which onboard controllers and sensors are enabled:  Value of 0: not enabled. Value of 1: enabled. (type:uint32_t, values:MAV_SYS_STATUS_SENSOR)
         onboard_control_sensors_health        : Bitmap showing which onboard controllers and sensors have an error (or are operational). Value of 0: error. Value of 1: healthy. (type:uint32_t, values:MAV_SYS_STATUS_SENSOR)
         load                      : Maximum usage in percent of the mainloop time. Values: [0-1000] - should always be below 1000 [d%] (type:uint16_t)
-        voltage_battery           : Battery voltage, UINT16_MAX: Voltage not sent by autopilot [mV] (type:uint16_t)
-        current_battery           : Battery current, -1: Current not sent by autopilot [cA] (type:int16_t)
-        battery_remaining         : Battery energy remaining, -1: Battery remaining energy not sent by autopilot [%] (type:int8_t)
+        voltage_battery           : Battery voltage, UINT16_MAX: Voltage not sent by autopilot. Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [mV] (type:uint16_t)
+        current_battery           : Battery current, -1: Current not sent by autopilot. Value may overflow/rollover for very high currents (> 327.67A). Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [cA] (type:int16_t)
+        battery_remaining         : Battery energy remaining, -1: Battery remaining energy not sent by autopilot. Value is ambiguous on multi-battery systems. BATTERY_STATUS is a recommended alternative. [%] (type:int8_t)
         drop_rate_comm            : Communication drop rate, (UART, I2C, SPI, CAN), dropped packets on all links (packets that were corrupted on reception on the MAV) [c%] (type:uint16_t)
         errors_comm               : Communication errors (UART, I2C, SPI, CAN), dropped packets on all links (packets that were corrupted on reception on the MAV) (type:uint16_t)
         errors_count1             : Autopilot-specific errors (type:uint16_t)
@@ -18548,12 +18599,12 @@ class MAVLink(object):
 
     def set_mode_encode(self, target_system: int, base_mode: int, custom_mode: int) -> MAVLink_set_mode_message:
         """
-        Set the system mode, as defined by enum MAV_MODE. There is no target
-        component id as the mode is by definition for the overall
-        aircraft, not only for one component.
+        Set the system mode, as defined by enum MAV_MODE_FLAG. There is no
+        target component id as the mode is by definition for the
+        overall aircraft, not only for one component.
 
         target_system             : The system setting the mode (type:uint8_t)
-        base_mode                 : The new base mode. (type:uint8_t, values:MAV_MODE)
+        base_mode                 : The new base mode. (type:uint8_t, values:MAV_MODE_FLAG)
         custom_mode               : The new autopilot-specific mode. This field can be ignored by an autopilot. (type:uint32_t)
 
         """
@@ -18561,12 +18612,12 @@ class MAVLink(object):
 
     def set_mode_send(self, target_system: int, base_mode: int, custom_mode: int, force_mavlink1: bool = False) -> None:
         """
-        Set the system mode, as defined by enum MAV_MODE. There is no target
-        component id as the mode is by definition for the overall
-        aircraft, not only for one component.
+        Set the system mode, as defined by enum MAV_MODE_FLAG. There is no
+        target component id as the mode is by definition for the
+        overall aircraft, not only for one component.
 
         target_system             : The system setting the mode (type:uint8_t)
-        base_mode                 : The new base mode. (type:uint8_t, values:MAV_MODE)
+        base_mode                 : The new base mode. (type:uint8_t, values:MAV_MODE_FLAG)
         custom_mode               : The new autopilot-specific mode. This field can be ignored by an autopilot. (type:uint32_t)
 
         """
@@ -22579,7 +22630,7 @@ class MAVLink(object):
         type                      : Type (chemistry) of the battery (type:uint8_t, values:MAV_BATTERY_TYPE)
         temperature               : Temperature of the battery. INT16_MAX for unknown temperature. [cdegC] (type:int16_t)
         voltages                  : Battery voltage of cells 1 to 10 (see voltages_ext for cells 11-14). Cells in this field above the valid cell count for this battery should have the UINT16_MAX value. If individual cell voltages are unknown or not measured for this battery, then the overall battery voltage should be filled in cell 0, with all others set to UINT16_MAX. If the voltage of the battery is greater than (UINT16_MAX - 1), then cell 0 should be set to (UINT16_MAX - 1), and cell 1 to the remaining voltage. This can be extended to multiple cells if the total voltage is greater than 2 * (UINT16_MAX - 1). [mV] (type:uint16_t)
-        current_battery           : Battery current, -1: autopilot does not measure the current [cA] (type:int16_t)
+        current_battery           : Battery current, -1: autopilot does not measure the current. Value may overflow/rollover for very high currents (> 327.67A) [cA] (type:int16_t)
         current_consumed          : Consumed charge, -1: autopilot does not provide consumption estimate [mAh] (type:int32_t)
         energy_consumed           : Consumed energy, -1: autopilot does not provide energy consumption estimate [hJ] (type:int32_t)
         battery_remaining         : Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery. [%] (type:int8_t)
@@ -22603,7 +22654,7 @@ class MAVLink(object):
         type                      : Type (chemistry) of the battery (type:uint8_t, values:MAV_BATTERY_TYPE)
         temperature               : Temperature of the battery. INT16_MAX for unknown temperature. [cdegC] (type:int16_t)
         voltages                  : Battery voltage of cells 1 to 10 (see voltages_ext for cells 11-14). Cells in this field above the valid cell count for this battery should have the UINT16_MAX value. If individual cell voltages are unknown or not measured for this battery, then the overall battery voltage should be filled in cell 0, with all others set to UINT16_MAX. If the voltage of the battery is greater than (UINT16_MAX - 1), then cell 0 should be set to (UINT16_MAX - 1), and cell 1 to the remaining voltage. This can be extended to multiple cells if the total voltage is greater than 2 * (UINT16_MAX - 1). [mV] (type:uint16_t)
-        current_battery           : Battery current, -1: autopilot does not measure the current [cA] (type:int16_t)
+        current_battery           : Battery current, -1: autopilot does not measure the current. Value may overflow/rollover for very high currents (> 327.67A) [cA] (type:int16_t)
         current_consumed          : Consumed charge, -1: autopilot does not provide consumption estimate [mAh] (type:int32_t)
         energy_consumed           : Consumed energy, -1: autopilot does not provide energy consumption estimate [hJ] (type:int32_t)
         battery_remaining         : Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery. [%] (type:int8_t)
@@ -24635,7 +24686,7 @@ class MAVLink(object):
         feed_forward_angular_velocity_z        : Feed forward Z component of angular velocity (positive: yawing to the right). NaN to be ignored. This is to indicate if the autopilot is actively yawing. [rad/s] (type:float)
         estimator_status          : Bitmap indicating which estimator outputs are valid. (type:uint16_t, values:ESTIMATOR_STATUS_FLAGS)
         landed_state              : The landed state. Is set to MAV_LANDED_STATE_UNDEFINED if landed state is unknown. (type:uint8_t, values:MAV_LANDED_STATE)
-        angular_velocity_z        : Z component of angular velocity in NED (North, East, Down). NaN if unknown. [rad/s] (type:float)
+        angular_velocity_z        : Z component of angular velocity in NED (North, East, Down). 0 if unknown. Use 0.00001 to represent a measured value of zero. [rad/s] (type:float)
 
         """
         return MAVLink_autopilot_state_for_gimbal_device_message(target_system, target_component, time_boot_us, q, q_estimated_delay_us, vx, vy, vz, v_estimated_delay_us, feed_forward_angular_velocity_z, estimator_status, landed_state, angular_velocity_z)
@@ -24661,7 +24712,7 @@ class MAVLink(object):
         feed_forward_angular_velocity_z        : Feed forward Z component of angular velocity (positive: yawing to the right). NaN to be ignored. This is to indicate if the autopilot is actively yawing. [rad/s] (type:float)
         estimator_status          : Bitmap indicating which estimator outputs are valid. (type:uint16_t, values:ESTIMATOR_STATUS_FLAGS)
         landed_state              : The landed state. Is set to MAV_LANDED_STATE_UNDEFINED if landed state is unknown. (type:uint8_t, values:MAV_LANDED_STATE)
-        angular_velocity_z        : Z component of angular velocity in NED (North, East, Down). NaN if unknown. [rad/s] (type:float)
+        angular_velocity_z        : Z component of angular velocity in NED (North, East, Down). 0 if unknown. Use 0.00001 to represent a measured value of zero. [rad/s] (type:float)
 
         """
         self.send(self.autopilot_state_for_gimbal_device_encode(target_system, target_component, time_boot_us, q, q_estimated_delay_us, vx, vy, vz, v_estimated_delay_us, feed_forward_angular_velocity_z, estimator_status, landed_state, angular_velocity_z), force_mavlink1=force_mavlink1)
@@ -25404,9 +25455,15 @@ class MAVLink(object):
         """
         self.send(self.trajectory_representation_bezier_encode(time_usec, valid_points, pos_x, pos_y, pos_z, delta, pos_yaw), force_mavlink1=force_mavlink1)
 
-    def cellular_status_encode(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int) -> MAVLink_cellular_status_message:
+    def cellular_status_encode(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int, id: int = 0, link_tx_rate: int = 0, link_rx_rate: int = 0, cell_tower_id: bytes = b"", band_number: int = 0, band_frequency: float = 0, channel_number: int = 0, rx_level: float = 0, tx_level: float = 0, rx_quality: float = 0, sinr: float = 0) -> MAVLink_cellular_status_message:
         """
-        Report current used cellular network status
+        Cellular network status as reported by a particular modem.
+        This is primarily intended for logging, but a GCS may choose
+        to display link_tx_rate and link_rx_rate.
+        Note that a value of 0 in the id field indicates that the
+        sender does not support reporting of multiple modems.
+        Message data should be from a single modem, but that is not
+        guaranteed.
 
         status                    : Cellular modem status (type:uint8_t, values:CELLULAR_STATUS_FLAG)
         failure_reason            : Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED (type:uint8_t, values:CELLULAR_NETWORK_FAILED_REASON)
@@ -25415,13 +25472,30 @@ class MAVLink(object):
         mcc                       : Mobile country code. If unknown, set to UINT16_MAX (type:uint16_t)
         mnc                       : Mobile network code. If unknown, set to UINT16_MAX (type:uint16_t)
         lac                       : Location area code. If unknown, set to 0 (type:uint16_t)
+        id                        : Cellular modem instance number. Indexed from 1. (type:uint8_t)
+        link_tx_rate              : Download rate. [KiB/s] (type:uint32_t)
+        link_rx_rate              : Upload rate. [KiB/s] (type:uint32_t)
+        cell_tower_id             : ID of the currently connected cell tower. This must be NULL terminated if the length is less than 9 human-readable chars, and without the null termination (NULL) byte if the length is exactly 9 chars. (type:char)
+        band_number               : LTE frequency band number. (type:uint8_t)
+        band_frequency            : LTE radio frequency. [MHz] (type:float)
+        channel_number            : The channel number (CN). Absolute radio-frequency (ARFCN) / E-UTRA (EARFCN) / UTRA (UARFCN) / New radio (NR_CH). (type:uint32_t)
+        rx_level                  : On 3G is Received Signal Code Power (RSCP). On LTE is Reference Signal Received Power (RSRP). On 5G is New Radio Reference Signal Received Power (NR_RSRP). [dBm] (type:float)
+        tx_level                  : Transmitter (modem) signal absolute power level. [dBm] (type:float)
+        rx_quality                : On 3G is Receiver Quality (RxQual). On LTE is Reference Signal Received Quality (RSRQ). On 5G is New Radio Reference Signal Received Quality (NR_RSRQ). [dBm] (type:float)
+        sinr                      : Signal to interference plus noise ratio (SINR). [dB] (type:float)
 
         """
-        return MAVLink_cellular_status_message(status, failure_reason, type, quality, mcc, mnc, lac)
+        return MAVLink_cellular_status_message(status, failure_reason, type, quality, mcc, mnc, lac, id, link_tx_rate, link_rx_rate, cell_tower_id, band_number, band_frequency, channel_number, rx_level, tx_level, rx_quality, sinr)
 
-    def cellular_status_send(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int, force_mavlink1: bool = False) -> None:
+    def cellular_status_send(self, status: int, failure_reason: int, type: int, quality: int, mcc: int, mnc: int, lac: int, id: int = 0, link_tx_rate: int = 0, link_rx_rate: int = 0, cell_tower_id: bytes = b"", band_number: int = 0, band_frequency: float = 0, channel_number: int = 0, rx_level: float = 0, tx_level: float = 0, rx_quality: float = 0, sinr: float = 0, force_mavlink1: bool = False) -> None:
         """
-        Report current used cellular network status
+        Cellular network status as reported by a particular modem.
+        This is primarily intended for logging, but a GCS may choose
+        to display link_tx_rate and link_rx_rate.
+        Note that a value of 0 in the id field indicates that the
+        sender does not support reporting of multiple modems.
+        Message data should be from a single modem, but that is not
+        guaranteed.
 
         status                    : Cellular modem status (type:uint8_t, values:CELLULAR_STATUS_FLAG)
         failure_reason            : Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED (type:uint8_t, values:CELLULAR_NETWORK_FAILED_REASON)
@@ -25430,9 +25504,20 @@ class MAVLink(object):
         mcc                       : Mobile country code. If unknown, set to UINT16_MAX (type:uint16_t)
         mnc                       : Mobile network code. If unknown, set to UINT16_MAX (type:uint16_t)
         lac                       : Location area code. If unknown, set to 0 (type:uint16_t)
+        id                        : Cellular modem instance number. Indexed from 1. (type:uint8_t)
+        link_tx_rate              : Download rate. [KiB/s] (type:uint32_t)
+        link_rx_rate              : Upload rate. [KiB/s] (type:uint32_t)
+        cell_tower_id             : ID of the currently connected cell tower. This must be NULL terminated if the length is less than 9 human-readable chars, and without the null termination (NULL) byte if the length is exactly 9 chars. (type:char)
+        band_number               : LTE frequency band number. (type:uint8_t)
+        band_frequency            : LTE radio frequency. [MHz] (type:float)
+        channel_number            : The channel number (CN). Absolute radio-frequency (ARFCN) / E-UTRA (EARFCN) / UTRA (UARFCN) / New radio (NR_CH). (type:uint32_t)
+        rx_level                  : On 3G is Received Signal Code Power (RSCP). On LTE is Reference Signal Received Power (RSRP). On 5G is New Radio Reference Signal Received Power (NR_RSRP). [dBm] (type:float)
+        tx_level                  : Transmitter (modem) signal absolute power level. [dBm] (type:float)
+        rx_quality                : On 3G is Receiver Quality (RxQual). On LTE is Reference Signal Received Quality (RSRQ). On 5G is New Radio Reference Signal Received Quality (NR_RSRQ). [dBm] (type:float)
+        sinr                      : Signal to interference plus noise ratio (SINR). [dB] (type:float)
 
         """
-        self.send(self.cellular_status_encode(status, failure_reason, type, quality, mcc, mnc, lac), force_mavlink1=force_mavlink1)
+        self.send(self.cellular_status_encode(status, failure_reason, type, quality, mcc, mnc, lac, id, link_tx_rate, link_rx_rate, cell_tower_id, band_number, band_frequency, channel_number, rx_level, tx_level, rx_quality, sinr), force_mavlink1=force_mavlink1)
 
     def isbd_link_status_encode(self, timestamp: int, last_heartbeat: int, failed_sessions: int, successful_sessions: int, signal_quality: int, ring_pending: int, tx_session_pending: int, rx_session_pending: int) -> MAVLink_isbd_link_status_message:
         """
@@ -26308,7 +26393,8 @@ class MAVLink(object):
 
     def play_tune_v2_encode(self, target_system: int, target_component: int, format: int, tune: bytes) -> MAVLink_play_tune_v2_message:
         """
-        Play vehicle tone/tune (buzzer). Supersedes message PLAY_TUNE.
+        Play vehicle tone/tune (buzzer). Supported tunes can be determined
+        using SUPPORTED_TUNES. Supersedes message PLAY_TUNE.
 
         target_system             : System ID (type:uint8_t)
         target_component          : Component ID (type:uint8_t)
@@ -26320,7 +26406,8 @@ class MAVLink(object):
 
     def play_tune_v2_send(self, target_system: int, target_component: int, format: int, tune: bytes, force_mavlink1: bool = False) -> None:
         """
-        Play vehicle tone/tune (buzzer). Supersedes message PLAY_TUNE.
+        Play vehicle tone/tune (buzzer). Supported tunes can be determined
+        using SUPPORTED_TUNES. Supersedes message PLAY_TUNE.
 
         target_system             : System ID (type:uint8_t)
         target_component          : Component ID (type:uint8_t)
@@ -26332,8 +26419,8 @@ class MAVLink(object):
 
     def supported_tunes_encode(self, target_system: int, target_component: int, format: int) -> MAVLink_supported_tunes_message:
         """
-        Tune formats supported by vehicle. This should be emitted as response
-        to MAV_CMD_REQUEST_MESSAGE.
+        Tune formats supported by vehicle, i.e. via PLAY_TUNE_V2. This should
+        be emitted as response to MAV_CMD_REQUEST_MESSAGE.
 
         target_system             : System ID (type:uint8_t)
         target_component          : Component ID (type:uint8_t)
@@ -26344,8 +26431,8 @@ class MAVLink(object):
 
     def supported_tunes_send(self, target_system: int, target_component: int, format: int, force_mavlink1: bool = False) -> None:
         """
-        Tune formats supported by vehicle. This should be emitted as response
-        to MAV_CMD_REQUEST_MESSAGE.
+        Tune formats supported by vehicle, i.e. via PLAY_TUNE_V2. This should
+        be emitted as response to MAV_CMD_REQUEST_MESSAGE.
 
         target_system             : System ID (type:uint8_t)
         target_component          : Component ID (type:uint8_t)

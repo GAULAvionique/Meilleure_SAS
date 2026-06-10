@@ -41,20 +41,24 @@ class DataManager(QObject):
         
 
     def _extract_flags(self, dico):
+        try:
+            system_states = {}
+            event_states = {}
+            for key in SYSTEM_STATES_FLAGS:
+                system_states[key] = bool(dico["system_states"] & (1 << SYSTEM_STATES_FLAGS[key]))
 
-        system_states = {}
-        event_states = {}
-        for key in SYSTEM_STATES_FLAGS:
-            system_states[key] = bool(dico["system_states"] & (1 << SYSTEM_STATES_FLAGS[key]))
+            for key in EVENT_STATES_FLAGS:
+                event_states[key] = bool(dico["event_states"] & (1 << EVENT_STATES_FLAGS[key]))
+            
+            del dico["system_states"]
+            del dico["event_states"]
 
-        for key in EVENT_STATES_FLAGS:
-            event_states[key] = bool(dico["event_states"] & (1 << EVENT_STATES_FLAGS[key]))
-        
-        del dico["system_states"]
-        del dico["event_states"]
-
-        dico.update(system_states)
-        dico.update(event_states)
+            dico.update(system_states)
+            dico.update(event_states)
+        except KeyError as exc:
+            print(f"Clé manquante dans _extract_flags : {exc}")
+        except Exception as exc:
+            print(f"Erreur dans _extract_flags : {exc}")
 
 
     def _extract_enum(self, dico):

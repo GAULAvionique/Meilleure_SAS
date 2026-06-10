@@ -34,8 +34,8 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "imu_mag_y"         : 100,
     "imu_mag_z"         : 100,
 
-    "pressure_hpa"      : 1,
-    "temp_celsius"      : 1,
+    "pressure_pa"       : 10,
+    "temp_celsius"      : 100,
 
     "highg_acc_x"       : 100,
     "highg_acc_y"       : 100,
@@ -51,11 +51,11 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
 
 
     # "pyros_connected"   : 1,
-    "imu_acc_vertical"  : 1,
-    "highg_acc_vertical": 1,
+    "imu_acc_vertical"  : 100,
+    "highg_acc_vertical": 100,
     "kalman_z"          : 100,
     "kalman_v"          : 100,
-    "altitude_msl_m"    : 1
+    "altitude_msl_m"    : 100
 }
 
 
@@ -79,14 +79,15 @@ SYSTEM_STATES_FLAGS = {         # Dictionnaire pour extraire les flags dans "sys
 
 
 EVENT_STATES_FLAGS = {          # Dictionnaire pour extraire les flags dans "event_states"
-    "FLAG_PYRO1_FIRED"       : 0,
-    "FLAG_PYRO2_FIRED"       : 1,
-    "FLAG_PYRO3_FIRED"       : 2,
-    "FLAG_PYRO4_FIRED"       : 3,
-    "FLAG_APOGEE_DETECTED"   : 4,
-    "FLAG_MAIN_DEPLOYED"     : 5,
-    "FLAG_DROGUE_DEPLOYED"   : 6,
-    "FLAG_MACH_LOCK_ENABLED" : 7,
+    "FLAG_PYROS_ARMED"       : 0,
+    "FLAG_PYRO1_FIRED"       : 1,
+    "FLAG_PYRO2_FIRED"       : 2,
+    "FLAG_PYRO3_FIRED"       : 3,
+    "FLAG_PYRO4_FIRED"       : 4,
+    "FLAG_APOGEE_DETECTED"   : 5,
+    "FLAG_MAIN_DEPLOYED"     : 6,
+    "FLAG_DROGUE_DEPLOYED"   : 7,
+    "FLAG_MACH_LOCK_ENABLED" : 8,
 }
 
 
@@ -118,7 +119,7 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "imu_mag_x",
     "imu_mag_y",
     "imu_mag_z",
-    "pressure_hpa",
+    "pressure_pa",
     "temp_celsius",
     "highg_acc_x",
     "highg_acc_y",
@@ -152,6 +153,7 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "FLAG_PYRO2_CONN",
     "FLAG_PYRO3_CONN",
     "FLAG_PYRO4_CONN",
+    "FLAG_PYROS_ARMED",
     "FLAG_PYRO1_FIRED",
     "FLAG_PYRO2_FIRED",
     "FLAG_PYRO3_FIRED",
