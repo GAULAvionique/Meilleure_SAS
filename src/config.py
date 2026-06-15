@@ -1,7 +1,7 @@
 # --- Configuration du receiver ---
 
-#SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
-SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
+SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
+#SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
 BOOSTER_SYS_ID = 2
