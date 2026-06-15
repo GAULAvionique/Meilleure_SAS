@@ -9,7 +9,7 @@ import numpy as np
 import os
 
 
-
+MAX_GRAPH_POINTS = 5000
 
 class Header(QWidget):
     def __init__(self, titre="Ground Station"):
@@ -565,7 +565,12 @@ class PageBelle(QWidget):
         self._alt_data.append(alt)
         self._vel_data.append(vel)
         self._acc_data.append(acc)
- 
+
+        self._time_data = self._time_data[-MAX_GRAPH_POINTS:]
+        self._alt_data  = self._alt_data[-MAX_GRAPH_POINTS:]
+        self._vel_data  = self._vel_data[-MAX_GRAPH_POINTS:]
+        self._acc_data  = self._acc_data[-MAX_GRAPH_POINTS:]
+
         t_arr = np.array(self._time_data)
         self.curve_alt.setData(t_arr, np.array(self._alt_data))
         self.curve_vel.setData(t_arr, np.array(self._vel_data))

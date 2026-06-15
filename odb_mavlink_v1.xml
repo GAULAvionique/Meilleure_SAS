@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<mavlink>
+    <include>common.xml</include>
+    <version>3</version>
+    <dialect>1</dialect>
+
+    <messages>
+        <message id="1350" name="ROCKET_TELEMETRY">
+            <description>ODB Rocket Telemetry</description>
+            
+            <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp since system boot in milliseconds.</field>
+            
+            <field type="int32_t" name="lat" units="degE7">Latitude in degrees * 1E7.</field>
+            <field type="int32_t" name="lon" units="degE7">Longitude in degrees * 1E7.</field>
+            <field type="int32_t" name="gps_alt" units="mm">Altitude (MSL) from GPS.</field>
+            
+            <field type="int32_t" name="altitude_msl_cm" units="cm">Altitude (MSL) from barometer.</field>
+            <field type="int32_t" name="kalman_z" units="cm">Filtered altitude from Kalman filter.</field>
+            <field type="int32_t" name="kalman_v" units="cm/s">Filtered velocity from Kalman filter.</field>
+
+            <field type="int32_t" name="imu_gyro_x" units="cdeg/s">IMU Gyro X.</field>
+            <field type="int32_t" name="imu_gyro_y" units="cdeg/s">IMU Gyro Y.</field>
+            <field type="int32_t" name="imu_gyro_z" units="cdeg/s">IMU Gyro Z.</field>
+
+            <field type="int32_t" name="highg_acc_x" units="cm/s/s">High-G Acceleration X.</field>
+            <field type="int32_t" name="highg_acc_y" units="cm/s/s">High-G Acceleration Y.</field>
+            <field type="int32_t" name="highg_acc_z" units="cm/s/s">High-G Acceleration Z.</field>
+            <field type="int32_t" name="highg_acc_vertical" units="cm/s/s">Vertical High-G acceleration.</field>
+            <field type="int32_t" name="imu_acc_vertical" units="cm/s/s">Vertical IMU acceleration.</field>
+            
+            <field type="uint32_t" name="pressure_pa" units="Pa">Pressure in pascals.</field>
+
+            <field type="int16_t" name="roll" units="cdeg">Roll angle in centi-degrees.</field>
+            <field type="int16_t" name="pitch" units="cdeg">Pitch angle in centi-degrees.</field>
+            <field type="int16_t" name="yaw" units="cdeg">Yaw angle in centi-degrees.</field>
+            
+            <field type="int16_t" name="imu_acc_x" units="cm/s/s">IMU Acceleration X.</field>
+            <field type="int16_t" name="imu_acc_y" units="cm/s/s">IMU Acceleration Y.</field>
+            <field type="int16_t" name="imu_acc_z" units="cm/s/s">IMU Acceleration Z.</field>
+            
+            <field type="int16_t" name="imu_mag_x" units="cuT">IMU Mag X in centi-microTesla.</field>
+            <field type="int16_t" name="imu_mag_y" units="cuT">IMU Mag Y in centi-microTesla.</field>
+            <field type="int16_t" name="imu_mag_z" units="cuT">IMU Mag Z in centi-microTesla.</field>
+            
+            <field type="int16_t" name="temp_celsius" units="cdegC">Temperature in centi-degrees Celsius.</field>
+            
+            <field type="uint16_t" name="system_states">Current system state bitfield.</field>
+            <field type="uint16_t" name="event_states">Current events states.</field>
+            <field type="uint16_t" name="battery_mv" units="mV">Battery voltage in millivolts.</field>
+            <field type="uint16_t" name="vel" units="cm/s">Ground speed.</field>
+            <field type="uint16_t" name="cog" units="cdeg">Course over ground.</field>
+
+            <field type="uint8_t" name="mission_state">Mission state.</field>
+            <field type="uint8_t" name="gps_fix">GPS fix type.</field>
+            <field type="uint8_t" name="satellites_nb">Number of visible satellites.</field>
+        </message>
+    </messages>
+</mavlink>

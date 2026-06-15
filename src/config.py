@@ -34,7 +34,7 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "imu_mag_y"         : 100,
     "imu_mag_z"         : 100,
 
-    "pressure_pa"       : 10,
+    "pressure_pa"       : 1000, # On a gardé le pa pour standardiser le nom des varibales, mais elle sera en kPa.
     "temp_celsius"      : 100,
 
     "highg_acc_x"       : 100,
@@ -55,7 +55,7 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "highg_acc_vertical": 100,
     "kalman_z"          : 100,
     "kalman_v"          : 100,
-    "altitude_msl_m"    : 100
+    "altitude_msl_m"    : 100,
 }
 
 

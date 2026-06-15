@@ -37,4 +37,13 @@ class MyLogger:
     def stop(self):                             # Cette méthode doit être appelé pour terminer correctement l'exécution du thread.
         self._working.clear()
         self.thread.join()
+
+        while not self.queue.empty():
+            try:
+                données = self.queue.get_nowait()
+                self.writer.writerow(données)
+            except queue.Empty:
+                break
+                
+        self.fichier.flush()
         self.fichier.close()

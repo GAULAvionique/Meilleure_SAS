@@ -79,8 +79,8 @@ class DataManager(QObject):
 
             if msg.get_srcSystem() == SUSTAINER_SYS_ID:
                 self.dico_top = dico
-                self.logger_top.log(dico)
-                self.signal_sustainer.emit(dico)
+                self.logger_top.log(dico.copy())
+                self.signal_sustainer.emit(dico.copy())
                 
             elif msg.get_srcSystem() == BOOSTER_SYS_ID:
                 self.dico_bot = dico

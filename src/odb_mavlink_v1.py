@@ -3243,8 +3243,28 @@ SERIAL_CONTROL_DEV_GPS1 = 2
 enums["SERIAL_CONTROL_DEV"][2] = EnumEntry("SERIAL_CONTROL_DEV_GPS1", """First GPS port""")
 SERIAL_CONTROL_DEV_GPS2 = 3
 enums["SERIAL_CONTROL_DEV"][3] = EnumEntry("SERIAL_CONTROL_DEV_GPS2", """Second GPS port""")
+SERIAL_CONTROL_DEV_TELEM3 = 4
+enums["SERIAL_CONTROL_DEV"][4] = EnumEntry("SERIAL_CONTROL_DEV_TELEM3", """Third telemetry port""")
+SERIAL_CONTROL_DEV_TELEM4 = 5
+enums["SERIAL_CONTROL_DEV"][5] = EnumEntry("SERIAL_CONTROL_DEV_TELEM4", """Fourth telemetry port""")
 SERIAL_CONTROL_DEV_SHELL = 10
 enums["SERIAL_CONTROL_DEV"][10] = EnumEntry("SERIAL_CONTROL_DEV_SHELL", """system shell""")
+SERIAL_CONTROL_DEV_ESC0 = 20
+enums["SERIAL_CONTROL_DEV"][20] = EnumEntry("SERIAL_CONTROL_DEV_ESC0", """Electronic Speed Controller 0""")
+SERIAL_CONTROL_DEV_ESC1 = 21
+enums["SERIAL_CONTROL_DEV"][21] = EnumEntry("SERIAL_CONTROL_DEV_ESC1", """Electronic Speed Controller 1""")
+SERIAL_CONTROL_DEV_ESC2 = 22
+enums["SERIAL_CONTROL_DEV"][22] = EnumEntry("SERIAL_CONTROL_DEV_ESC2", """Electronic Speed Controller 2""")
+SERIAL_CONTROL_DEV_ESC3 = 23
+enums["SERIAL_CONTROL_DEV"][23] = EnumEntry("SERIAL_CONTROL_DEV_ESC3", """Electronic Speed Controller 3""")
+SERIAL_CONTROL_DEV_ESC4 = 24
+enums["SERIAL_CONTROL_DEV"][24] = EnumEntry("SERIAL_CONTROL_DEV_ESC4", """Electronic Speed Controller 4""")
+SERIAL_CONTROL_DEV_ESC5 = 25
+enums["SERIAL_CONTROL_DEV"][25] = EnumEntry("SERIAL_CONTROL_DEV_ESC5", """Electronic Speed Controller 5""")
+SERIAL_CONTROL_DEV_ESC6 = 26
+enums["SERIAL_CONTROL_DEV"][26] = EnumEntry("SERIAL_CONTROL_DEV_ESC6", """Electronic Speed Controller 6""")
+SERIAL_CONTROL_DEV_ESC7 = 27
+enums["SERIAL_CONTROL_DEV"][27] = EnumEntry("SERIAL_CONTROL_DEV_ESC7", """Electronic Speed Controller 7""")
 SERIAL_CONTROL_SERIAL0 = 100
 enums["SERIAL_CONTROL_DEV"][100] = EnumEntry("SERIAL_CONTROL_SERIAL0", """SERIAL0""")
 SERIAL_CONTROL_SERIAL1 = 101
@@ -6327,68 +6347,68 @@ MAVLINK_MSG_ID_HEARTBEAT = 0
 
 class MAVLink_rocket_telemetry_message(MAVLink_message):
     """
-    ODB Rocket Telemetry.
+    ODB Rocket Telemetry
     """
 
     id = MAVLINK_MSG_ID_ROCKET_TELEMETRY
     msgname = "ROCKET_TELEMETRY"
-    fieldnames = ["time_boot_ms", "system_states", "event_states", "mission_state", "battery_mv", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_pa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "gps_fix", "lat", "lon", "gps_alt", "vel", "cog", "satellites_nb", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v"]
-    ordered_fieldnames = ["time_boot_ms", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "altitude_msl_m", "pressure_pa", "temp_celsius", "highg_acc_x", "highg_acc_y", "highg_acc_z", "lat", "lon", "gps_alt", "imu_acc_vertical", "highg_acc_vertical", "kalman_z", "kalman_v", "system_states", "event_states", "battery_mv", "vel", "cog", "mission_state", "gps_fix", "satellites_nb"]
-    fieldtypes = ["uint32_t", "uint16_t", "uint16_t", "uint8_t", "uint16_t", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "float", "uint8_t", "int32_t", "int32_t", "int32_t", "uint16_t", "uint16_t", "uint8_t", "float", "float", "float", "float"]
+    fieldnames = ["time_boot_ms", "lat", "lon", "gps_alt", "altitude_msl_cm", "kalman_z", "kalman_v", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "highg_acc_x", "highg_acc_y", "highg_acc_z", "highg_acc_vertical", "imu_acc_vertical", "pressure_pa", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "temp_celsius", "system_states", "event_states", "battery_mv", "vel", "cog", "mission_state", "gps_fix", "satellites_nb"]
+    ordered_fieldnames = ["time_boot_ms", "lat", "lon", "gps_alt", "altitude_msl_cm", "kalman_z", "kalman_v", "imu_gyro_x", "imu_gyro_y", "imu_gyro_z", "highg_acc_x", "highg_acc_y", "highg_acc_z", "highg_acc_vertical", "imu_acc_vertical", "pressure_pa", "roll", "pitch", "yaw", "imu_acc_x", "imu_acc_y", "imu_acc_z", "imu_mag_x", "imu_mag_y", "imu_mag_z", "temp_celsius", "system_states", "event_states", "battery_mv", "vel", "cog", "mission_state", "gps_fix", "satellites_nb"]
+    fieldtypes = ["uint32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "int32_t", "uint32_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "int16_t", "uint16_t", "uint16_t", "uint16_t", "uint16_t", "uint16_t", "uint8_t", "uint8_t", "uint8_t"]
     fielddisplays_by_name: Dict[str, str] = {}
     fieldenums_by_name: Dict[str, str] = {}
-    fieldunits_by_name: Dict[str, str] = {"time_boot_ms": "ms", "battery_mv": "mV", "roll": "cdeg", "pitch": "cdeg", "yaw": "cdeg", "imu_acc_x": "cm/s/s", "imu_acc_y": "cm/s/s", "imu_acc_z": "cm/s/s", "imu_gyro_x": "cdeg/s", "imu_gyro_y": "cdeg/s", "imu_gyro_z": "cdeg/s", "imu_mag_x": "cuT", "imu_mag_y": "cuT", "imu_mag_z": "cuT", "altitude_msl_m": "cm", "pressure_pa": "hPa", "temp_celsius": "cdegC", "highg_acc_x": "cm/s/s", "highg_acc_y": "cm/s/s", "highg_acc_z": "cm/s/s", "lat": "degE7", "lon": "degE7", "gps_alt": "mm", "vel": "cm/s", "cog": "cdeg", "imu_acc_vertical": "cm/s/s", "highg_acc_vertical": "cm/s/s", "kalman_z": "cm", "kalman_v": "cm/s"}
-    native_format = bytearray(b"<IffffffffffffffffffiiiffffHHHHHBBB")
-    orders = [0, 26, 27, 31, 28, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 32, 19, 20, 21, 29, 30, 33, 22, 23, 24, 25]
+    fieldunits_by_name: Dict[str, str] = {"time_boot_ms": "ms", "lat": "degE7", "lon": "degE7", "gps_alt": "mm", "altitude_msl_cm": "cm", "kalman_z": "cm", "kalman_v": "cm/s", "imu_gyro_x": "cdeg/s", "imu_gyro_y": "cdeg/s", "imu_gyro_z": "cdeg/s", "highg_acc_x": "cm/s/s", "highg_acc_y": "cm/s/s", "highg_acc_z": "cm/s/s", "highg_acc_vertical": "cm/s/s", "imu_acc_vertical": "cm/s/s", "pressure_pa": "Pa", "roll": "cdeg", "pitch": "cdeg", "yaw": "cdeg", "imu_acc_x": "cm/s/s", "imu_acc_y": "cm/s/s", "imu_acc_z": "cm/s/s", "imu_mag_x": "cuT", "imu_mag_y": "cuT", "imu_mag_z": "cuT", "temp_celsius": "cdegC", "battery_mv": "mV", "vel": "cm/s", "cog": "cdeg"}
+    native_format = bytearray(b"<IiiiiiiiiiiiiiiIhhhhhhhhhhHHHHHBBB")
+    orders = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
     lengths = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     array_lengths = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    crc_extra = 157
-    unpacker = struct.Struct("<IffffffffffffffffffiiiffffHHHHHBBB")
+    crc_extra = 10
+    unpacker = struct.Struct("<IiiiiiiiiiiiiiiIhhhhhhhhhhHHHHHBBB")
     instance_field = None
     instance_offset = -1
 
-    def __init__(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float):
+    def __init__(self, time_boot_ms: int, lat: int, lon: int, gps_alt: int, altitude_msl_cm: int, kalman_z: int, kalman_v: int, imu_gyro_x: int, imu_gyro_y: int, imu_gyro_z: int, highg_acc_x: int, highg_acc_y: int, highg_acc_z: int, highg_acc_vertical: int, imu_acc_vertical: int, pressure_pa: int, roll: int, pitch: int, yaw: int, imu_acc_x: int, imu_acc_y: int, imu_acc_z: int, imu_mag_x: int, imu_mag_y: int, imu_mag_z: int, temp_celsius: int, system_states: int, event_states: int, battery_mv: int, vel: int, cog: int, mission_state: int, gps_fix: int, satellites_nb: int):
         MAVLink_message.__init__(self, MAVLink_rocket_telemetry_message.id, MAVLink_rocket_telemetry_message.msgname)
         self._fieldnames = MAVLink_rocket_telemetry_message.fieldnames
         self._instance_field = MAVLink_rocket_telemetry_message.instance_field
         self._instance_offset = MAVLink_rocket_telemetry_message.instance_offset
         self.time_boot_ms = time_boot_ms
-        self.system_states = system_states
-        self.event_states = event_states
-        self.mission_state = mission_state
-        self.battery_mv = battery_mv
+        self.lat = lat
+        self.lon = lon
+        self.gps_alt = gps_alt
+        self.altitude_msl_cm = altitude_msl_cm
+        self.kalman_z = kalman_z
+        self.kalman_v = kalman_v
+        self.imu_gyro_x = imu_gyro_x
+        self.imu_gyro_y = imu_gyro_y
+        self.imu_gyro_z = imu_gyro_z
+        self.highg_acc_x = highg_acc_x
+        self.highg_acc_y = highg_acc_y
+        self.highg_acc_z = highg_acc_z
+        self.highg_acc_vertical = highg_acc_vertical
+        self.imu_acc_vertical = imu_acc_vertical
+        self.pressure_pa = pressure_pa
         self.roll = roll
         self.pitch = pitch
         self.yaw = yaw
         self.imu_acc_x = imu_acc_x
         self.imu_acc_y = imu_acc_y
         self.imu_acc_z = imu_acc_z
-        self.imu_gyro_x = imu_gyro_x
-        self.imu_gyro_y = imu_gyro_y
-        self.imu_gyro_z = imu_gyro_z
         self.imu_mag_x = imu_mag_x
         self.imu_mag_y = imu_mag_y
         self.imu_mag_z = imu_mag_z
-        self.altitude_msl_m = altitude_msl_m
-        self.pressure_pa = pressure_pa
         self.temp_celsius = temp_celsius
-        self.highg_acc_x = highg_acc_x
-        self.highg_acc_y = highg_acc_y
-        self.highg_acc_z = highg_acc_z
-        self.gps_fix = gps_fix
-        self.lat = lat
-        self.lon = lon
-        self.gps_alt = gps_alt
+        self.system_states = system_states
+        self.event_states = event_states
+        self.battery_mv = battery_mv
         self.vel = vel
         self.cog = cog
+        self.mission_state = mission_state
+        self.gps_fix = gps_fix
         self.satellites_nb = satellites_nb
-        self.imu_acc_vertical = imu_acc_vertical
-        self.highg_acc_vertical = highg_acc_vertical
-        self.kalman_z = kalman_z
-        self.kalman_v = kalman_v
 
     def pack(self, mav: "MAVLink", force_mavlink1: bool = False) -> bytes:
-        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.time_boot_ms, self.roll, self.pitch, self.yaw, self.imu_acc_x, self.imu_acc_y, self.imu_acc_z, self.imu_gyro_x, self.imu_gyro_y, self.imu_gyro_z, self.imu_mag_x, self.imu_mag_y, self.imu_mag_z, self.altitude_msl_m, self.pressure_pa, self.temp_celsius, self.highg_acc_x, self.highg_acc_y, self.highg_acc_z, self.lat, self.lon, self.gps_alt, self.imu_acc_vertical, self.highg_acc_vertical, self.kalman_z, self.kalman_v, self.system_states, self.event_states, self.battery_mv, self.vel, self.cog, self.mission_state, self.gps_fix, self.satellites_nb), force_mavlink1=force_mavlink1)
+        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.time_boot_ms, self.lat, self.lon, self.gps_alt, self.altitude_msl_cm, self.kalman_z, self.kalman_v, self.imu_gyro_x, self.imu_gyro_y, self.imu_gyro_z, self.highg_acc_x, self.highg_acc_y, self.highg_acc_z, self.highg_acc_vertical, self.imu_acc_vertical, self.pressure_pa, self.roll, self.pitch, self.yaw, self.imu_acc_x, self.imu_acc_y, self.imu_acc_z, self.imu_mag_x, self.imu_mag_y, self.imu_mag_z, self.temp_celsius, self.system_states, self.event_states, self.battery_mv, self.vel, self.cog, self.mission_state, self.gps_fix, self.satellites_nb), force_mavlink1=force_mavlink1)
 
 
 # Define name on the class for backwards compatibility (it is now msgname).
@@ -15304,10 +15324,10 @@ class MAVLink_cellular_status_message(MAVLink_message):
     """
     Cellular network status as reported by a particular modem.
     This is primarily intended for logging, but a GCS may choose to
-    display link_tx_rate and link_rx_rate.                  Note that
-    a value of 0 in the id field indicates that the sender does not
-    support reporting of multiple modems.         Message data should
-    be from a single modem, but that is not guaranteed.
+    display link_tx_rate and link_rx_rate.          Note that a value
+    of 0 in the id field indicates that the sender does not support
+    reporting of multiple modems.         Message data should be from
+    a single modem, but that is not guaranteed.
     """
 
     id = MAVLINK_MSG_ID_CELLULAR_STATUS
@@ -18287,89 +18307,89 @@ class MAVLink(object):
         m._header = MAVLink_header(msgId, incompat_flags, compat_flags, mlen, seq, srcSystem, srcComponent)
         return m
 
-    def rocket_telemetry_encode(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float) -> MAVLink_rocket_telemetry_message:
+    def rocket_telemetry_encode(self, time_boot_ms: int, lat: int, lon: int, gps_alt: int, altitude_msl_cm: int, kalman_z: int, kalman_v: int, imu_gyro_x: int, imu_gyro_y: int, imu_gyro_z: int, highg_acc_x: int, highg_acc_y: int, highg_acc_z: int, highg_acc_vertical: int, imu_acc_vertical: int, pressure_pa: int, roll: int, pitch: int, yaw: int, imu_acc_x: int, imu_acc_y: int, imu_acc_z: int, imu_mag_x: int, imu_mag_y: int, imu_mag_z: int, temp_celsius: int, system_states: int, event_states: int, battery_mv: int, vel: int, cog: int, mission_state: int, gps_fix: int, satellites_nb: int) -> MAVLink_rocket_telemetry_message:
         """
-        ODB Rocket Telemetry.
+        ODB Rocket Telemetry
 
-        time_boot_ms              : Timestamp in milliseconds. [ms] (type:uint32_t)
-        system_states             : Current system state bitfield. (type:uint16_t)
-        event_states              : Current events states (pyros fired, apogee, etc.). (type:uint16_t)
-        mission_state             : Mission state. (type:uint8_t)
-        battery_mv                : Battery voltage in millivolts. [mV] (type:uint16_t)
-        roll                      : Roll angle in centi-degrees. [cdeg] (type:float)
-        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:float)
-        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:float)
-        imu_acc_x                 : IMU Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
-        imu_acc_y                 : IMU Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
-        imu_acc_z                 : IMU Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
-        imu_gyro_x                : IMU Gyro X in centi-degrees per second. [cdeg/s] (type:float)
-        imu_gyro_y                : IMU Gyro Y in centi-degrees per second. [cdeg/s] (type:float)
-        imu_gyro_z                : IMU Gyro Z in centi-degrees per second. [cdeg/s] (type:float)
-        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:float)
-        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:float)
-        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:float)
-        altitude_msl_m            : Altitude (MSL) from barometer in centimeters. [cm] (type:float)
-        pressure_pa               : Pressure in hectopascals. [hPa] (type:float)
-        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:float)
-        highg_acc_x               : High-G Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_y               : High-G Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_z               : High-G Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
-        gps_fix                   : GPS fix type (0: No fix, 1: Active fix, etc.). (type:uint8_t)
+        time_boot_ms              : Timestamp since system boot in milliseconds. [ms] (type:uint32_t)
         lat                       : Latitude in degrees * 1E7. [degE7] (type:int32_t)
         lon                       : Longitude in degrees * 1E7. [degE7] (type:int32_t)
-        gps_alt                   : Altitude (MSL) from GPS in millimeters. [mm] (type:int32_t)
-        vel                       : Ground speed in centimeters per second. [cm/s] (type:uint16_t)
-        cog                       : Course over ground in centi-degrees. [cdeg] (type:uint16_t)
-        satellites_nb             : Number of visible satellites. (type:uint8_t)
-        imu_acc_vertical          : Vertical acceleration from IMU in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_vertical        : Vertical acceleration from High-G in centimeters per second squared. [cm/s/s] (type:float)
-        kalman_z                  : Filtered altitude from Kalman filter in centimeters. [cm] (type:float)
-        kalman_v                  : Filtered velocity from Kalman filter in centimeters per second. [cm/s] (type:float)
-
-        """
-        return MAVLink_rocket_telemetry_message(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_pa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v)
-
-    def rocket_telemetry_send(self, time_boot_ms: int, system_states: int, event_states: int, mission_state: int, battery_mv: int, roll: float, pitch: float, yaw: float, imu_acc_x: float, imu_acc_y: float, imu_acc_z: float, imu_gyro_x: float, imu_gyro_y: float, imu_gyro_z: float, imu_mag_x: float, imu_mag_y: float, imu_mag_z: float, altitude_msl_m: float, pressure_pa: float, temp_celsius: float, highg_acc_x: float, highg_acc_y: float, highg_acc_z: float, gps_fix: int, lat: int, lon: int, gps_alt: int, vel: int, cog: int, satellites_nb: int, imu_acc_vertical: float, highg_acc_vertical: float, kalman_z: float, kalman_v: float, force_mavlink1: bool = False) -> None:
-        """
-        ODB Rocket Telemetry.
-
-        time_boot_ms              : Timestamp in milliseconds. [ms] (type:uint32_t)
+        gps_alt                   : Altitude (MSL) from GPS. [mm] (type:int32_t)
+        altitude_msl_cm           : Altitude (MSL) from barometer. [cm] (type:int32_t)
+        kalman_z                  : Filtered altitude from Kalman filter. [cm] (type:int32_t)
+        kalman_v                  : Filtered velocity from Kalman filter. [cm/s] (type:int32_t)
+        imu_gyro_x                : IMU Gyro X. [cdeg/s] (type:int32_t)
+        imu_gyro_y                : IMU Gyro Y. [cdeg/s] (type:int32_t)
+        imu_gyro_z                : IMU Gyro Z. [cdeg/s] (type:int32_t)
+        highg_acc_x               : High-G Acceleration X. [cm/s/s] (type:int32_t)
+        highg_acc_y               : High-G Acceleration Y. [cm/s/s] (type:int32_t)
+        highg_acc_z               : High-G Acceleration Z. [cm/s/s] (type:int32_t)
+        highg_acc_vertical        : Vertical High-G acceleration. [cm/s/s] (type:int32_t)
+        imu_acc_vertical          : Vertical IMU acceleration. [cm/s/s] (type:int32_t)
+        pressure_pa               : Pressure in pascals. [Pa] (type:uint32_t)
+        roll                      : Roll angle in centi-degrees. [cdeg] (type:int16_t)
+        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:int16_t)
+        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:int16_t)
+        imu_acc_x                 : IMU Acceleration X. [cm/s/s] (type:int16_t)
+        imu_acc_y                 : IMU Acceleration Y. [cm/s/s] (type:int16_t)
+        imu_acc_z                 : IMU Acceleration Z. [cm/s/s] (type:int16_t)
+        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:int16_t)
+        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:int16_t)
+        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:int16_t)
+        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:int16_t)
         system_states             : Current system state bitfield. (type:uint16_t)
-        event_states              : Current events states (pyros fired, apogee, etc.). (type:uint16_t)
-        mission_state             : Mission state. (type:uint8_t)
+        event_states              : Current events states. (type:uint16_t)
         battery_mv                : Battery voltage in millivolts. [mV] (type:uint16_t)
-        roll                      : Roll angle in centi-degrees. [cdeg] (type:float)
-        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:float)
-        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:float)
-        imu_acc_x                 : IMU Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
-        imu_acc_y                 : IMU Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
-        imu_acc_z                 : IMU Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
-        imu_gyro_x                : IMU Gyro X in centi-degrees per second. [cdeg/s] (type:float)
-        imu_gyro_y                : IMU Gyro Y in centi-degrees per second. [cdeg/s] (type:float)
-        imu_gyro_z                : IMU Gyro Z in centi-degrees per second. [cdeg/s] (type:float)
-        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:float)
-        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:float)
-        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:float)
-        altitude_msl_m            : Altitude (MSL) from barometer in centimeters. [cm] (type:float)
-        pressure_pa               : Pressure in hectopascals. [hPa] (type:float)
-        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:float)
-        highg_acc_x               : High-G Acceleration X in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_y               : High-G Acceleration Y in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_z               : High-G Acceleration Z in centimeters per second squared. [cm/s/s] (type:float)
-        gps_fix                   : GPS fix type (0: No fix, 1: Active fix, etc.). (type:uint8_t)
+        vel                       : Ground speed. [cm/s] (type:uint16_t)
+        cog                       : Course over ground. [cdeg] (type:uint16_t)
+        mission_state             : Mission state. (type:uint8_t)
+        gps_fix                   : GPS fix type. (type:uint8_t)
+        satellites_nb             : Number of visible satellites. (type:uint8_t)
+
+        """
+        return MAVLink_rocket_telemetry_message(time_boot_ms, lat, lon, gps_alt, altitude_msl_cm, kalman_z, kalman_v, imu_gyro_x, imu_gyro_y, imu_gyro_z, highg_acc_x, highg_acc_y, highg_acc_z, highg_acc_vertical, imu_acc_vertical, pressure_pa, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_mag_x, imu_mag_y, imu_mag_z, temp_celsius, system_states, event_states, battery_mv, vel, cog, mission_state, gps_fix, satellites_nb)
+
+    def rocket_telemetry_send(self, time_boot_ms: int, lat: int, lon: int, gps_alt: int, altitude_msl_cm: int, kalman_z: int, kalman_v: int, imu_gyro_x: int, imu_gyro_y: int, imu_gyro_z: int, highg_acc_x: int, highg_acc_y: int, highg_acc_z: int, highg_acc_vertical: int, imu_acc_vertical: int, pressure_pa: int, roll: int, pitch: int, yaw: int, imu_acc_x: int, imu_acc_y: int, imu_acc_z: int, imu_mag_x: int, imu_mag_y: int, imu_mag_z: int, temp_celsius: int, system_states: int, event_states: int, battery_mv: int, vel: int, cog: int, mission_state: int, gps_fix: int, satellites_nb: int, force_mavlink1: bool = False) -> None:
+        """
+        ODB Rocket Telemetry
+
+        time_boot_ms              : Timestamp since system boot in milliseconds. [ms] (type:uint32_t)
         lat                       : Latitude in degrees * 1E7. [degE7] (type:int32_t)
         lon                       : Longitude in degrees * 1E7. [degE7] (type:int32_t)
-        gps_alt                   : Altitude (MSL) from GPS in millimeters. [mm] (type:int32_t)
-        vel                       : Ground speed in centimeters per second. [cm/s] (type:uint16_t)
-        cog                       : Course over ground in centi-degrees. [cdeg] (type:uint16_t)
+        gps_alt                   : Altitude (MSL) from GPS. [mm] (type:int32_t)
+        altitude_msl_cm           : Altitude (MSL) from barometer. [cm] (type:int32_t)
+        kalman_z                  : Filtered altitude from Kalman filter. [cm] (type:int32_t)
+        kalman_v                  : Filtered velocity from Kalman filter. [cm/s] (type:int32_t)
+        imu_gyro_x                : IMU Gyro X. [cdeg/s] (type:int32_t)
+        imu_gyro_y                : IMU Gyro Y. [cdeg/s] (type:int32_t)
+        imu_gyro_z                : IMU Gyro Z. [cdeg/s] (type:int32_t)
+        highg_acc_x               : High-G Acceleration X. [cm/s/s] (type:int32_t)
+        highg_acc_y               : High-G Acceleration Y. [cm/s/s] (type:int32_t)
+        highg_acc_z               : High-G Acceleration Z. [cm/s/s] (type:int32_t)
+        highg_acc_vertical        : Vertical High-G acceleration. [cm/s/s] (type:int32_t)
+        imu_acc_vertical          : Vertical IMU acceleration. [cm/s/s] (type:int32_t)
+        pressure_pa               : Pressure in pascals. [Pa] (type:uint32_t)
+        roll                      : Roll angle in centi-degrees. [cdeg] (type:int16_t)
+        pitch                     : Pitch angle in centi-degrees. [cdeg] (type:int16_t)
+        yaw                       : Yaw angle in centi-degrees. [cdeg] (type:int16_t)
+        imu_acc_x                 : IMU Acceleration X. [cm/s/s] (type:int16_t)
+        imu_acc_y                 : IMU Acceleration Y. [cm/s/s] (type:int16_t)
+        imu_acc_z                 : IMU Acceleration Z. [cm/s/s] (type:int16_t)
+        imu_mag_x                 : IMU Mag X in centi-microTesla. [cuT] (type:int16_t)
+        imu_mag_y                 : IMU Mag Y in centi-microTesla. [cuT] (type:int16_t)
+        imu_mag_z                 : IMU Mag Z in centi-microTesla. [cuT] (type:int16_t)
+        temp_celsius              : Temperature in centi-degrees Celsius. [cdegC] (type:int16_t)
+        system_states             : Current system state bitfield. (type:uint16_t)
+        event_states              : Current events states. (type:uint16_t)
+        battery_mv                : Battery voltage in millivolts. [mV] (type:uint16_t)
+        vel                       : Ground speed. [cm/s] (type:uint16_t)
+        cog                       : Course over ground. [cdeg] (type:uint16_t)
+        mission_state             : Mission state. (type:uint8_t)
+        gps_fix                   : GPS fix type. (type:uint8_t)
         satellites_nb             : Number of visible satellites. (type:uint8_t)
-        imu_acc_vertical          : Vertical acceleration from IMU in centimeters per second squared. [cm/s/s] (type:float)
-        highg_acc_vertical        : Vertical acceleration from High-G in centimeters per second squared. [cm/s/s] (type:float)
-        kalman_z                  : Filtered altitude from Kalman filter in centimeters. [cm] (type:float)
-        kalman_v                  : Filtered velocity from Kalman filter in centimeters per second. [cm/s] (type:float)
 
         """
-        self.send(self.rocket_telemetry_encode(time_boot_ms, system_states, event_states, mission_state, battery_mv, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_gyro_x, imu_gyro_y, imu_gyro_z, imu_mag_x, imu_mag_y, imu_mag_z, altitude_msl_m, pressure_pa, temp_celsius, highg_acc_x, highg_acc_y, highg_acc_z, gps_fix, lat, lon, gps_alt, vel, cog, satellites_nb, imu_acc_vertical, highg_acc_vertical, kalman_z, kalman_v), force_mavlink1=force_mavlink1)
+        self.send(self.rocket_telemetry_encode(time_boot_ms, lat, lon, gps_alt, altitude_msl_cm, kalman_z, kalman_v, imu_gyro_x, imu_gyro_y, imu_gyro_z, highg_acc_x, highg_acc_y, highg_acc_z, highg_acc_vertical, imu_acc_vertical, pressure_pa, roll, pitch, yaw, imu_acc_x, imu_acc_y, imu_acc_z, imu_mag_x, imu_mag_y, imu_mag_z, temp_celsius, system_states, event_states, battery_mv, vel, cog, mission_state, gps_fix, satellites_nb), force_mavlink1=force_mavlink1)
 
     def sys_status_encode(self, onboard_control_sensors_present: int, onboard_control_sensors_enabled: int, onboard_control_sensors_health: int, load: int, voltage_battery: int, current_battery: int, battery_remaining: int, drop_rate_comm: int, errors_comm: int, errors_count1: int, errors_count2: int, errors_count3: int, errors_count4: int, onboard_control_sensors_present_extended: int = 0, onboard_control_sensors_enabled_extended: int = 0, onboard_control_sensors_health_extended: int = 0) -> MAVLink_sys_status_message:
         """
@@ -25459,11 +25479,10 @@ class MAVLink(object):
         """
         Cellular network status as reported by a particular modem.
         This is primarily intended for logging, but a GCS may choose
-        to display link_tx_rate and link_rx_rate.
-        Note that a value of 0 in the id field indicates that the
-        sender does not support reporting of multiple modems.
-        Message data should be from a single modem, but that is not
-        guaranteed.
+        to display link_tx_rate and link_rx_rate.          Note that a
+        value of 0 in the id field indicates that the sender does not
+        support reporting of multiple modems.         Message data
+        should be from a single modem, but that is not guaranteed.
 
         status                    : Cellular modem status (type:uint8_t, values:CELLULAR_STATUS_FLAG)
         failure_reason            : Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED (type:uint8_t, values:CELLULAR_NETWORK_FAILED_REASON)
@@ -25491,11 +25510,10 @@ class MAVLink(object):
         """
         Cellular network status as reported by a particular modem.
         This is primarily intended for logging, but a GCS may choose
-        to display link_tx_rate and link_rx_rate.
-        Note that a value of 0 in the id field indicates that the
-        sender does not support reporting of multiple modems.
-        Message data should be from a single modem, but that is not
-        guaranteed.
+        to display link_tx_rate and link_rx_rate.          Note that a
+        value of 0 in the id field indicates that the sender does not
+        support reporting of multiple modems.         Message data
+        should be from a single modem, but that is not guaranteed.
 
         status                    : Cellular modem status (type:uint8_t, values:CELLULAR_STATUS_FLAG)
         failure_reason            : Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED (type:uint8_t, values:CELLULAR_NETWORK_FAILED_REASON)
