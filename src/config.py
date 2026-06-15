@@ -55,7 +55,7 @@ CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur ser
     "highg_acc_vertical": 100,
     "kalman_z"          : 100,
     "kalman_v"          : 100,
-    "altitude_msl_m"    : 100,
+    "altitude_msl_cm"   : 100,
 }
 
 
@@ -136,7 +136,7 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "highg_acc_vertical",
     "kalman_z",
     "kalman_v",
-    "altitude_msl_m",
+    "altitude_msl_cm",
 
     "FLAG_IDEFIX_OK",
     "FLAG_BT_OK",
