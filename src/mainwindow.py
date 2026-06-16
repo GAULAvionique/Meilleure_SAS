@@ -267,8 +267,8 @@ class PageDonnees(QWidget):
         self.label_temp.setText(f"{dico['temp_celsius']:.5g} °C")
         self.label_pressure.setText(f"{dico['pressure_pa']:.5g} kPa")
 
-        self.label_lat.setText(f"{dico['lat']:.5g} °")
-        self.label_lon.setText(f"{dico['lon']:.5g} °")
+        self.label_lat.setText(f"{dico['lat']} °")
+        self.label_lon.setText(f"{dico['lon']} °")
         self.label_gps_alt.setText(f"{dico['gps_alt']:.5g} m")
         self.label_vel.setText(f"{dico['vel']:.5g} m/s")
         self.label_cog.setText(f"{dico['cog']:.5g} °")
