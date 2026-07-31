@@ -1,5 +1,5 @@
 import os
-from mainWindow import PageDonnees, Header, PageBelle
+from mainwindow import PageDonnees, Header, PageBelle
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
 from qt_material import apply_stylesheet
 from datetime import datetime
