@@ -11,6 +11,15 @@ RECV_TIMEOUT_S = 2.0
 RECONNECT_DELAY_S = 2.0
 
 
+# --- Configuration de mainWindow ---
+
+ALT_MAX = 4000
+ACC_MIN = -50
+ACC_MAX = 500
+
+GRAPHS_REFRESH_RATE = 2000
+
+
 # --- Configuration de DataManager ---
 
 CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié 

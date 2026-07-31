@@ -17,7 +17,8 @@ class MyWindow(QMainWindow):
         super().__init__()
         obj_path = os.path.join(os.path.dirname(__file__), "assets", "fusee.obj")
 
-        self.setFixedSize(1280, 720)
+        self.showFullScreen()
+        #self.setFixedSize(1280, 720)
 
         self.logger_booster = logger_booster
         self.logger_sustainer = logger_sustainer

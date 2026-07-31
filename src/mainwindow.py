@@ -2,11 +2,13 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QGroupBox,
     QScrollArea, QSizePolicy, 
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
 import numpy as np
 import os
+from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE
+import time
 
 
 MAX_GRAPH_POINTS = 5000
@@ -486,11 +488,18 @@ class RocketView3D(QWidget):
 class PageBelle(QWidget):
     def __init__(self, obj_path=None):
         super().__init__()
+
+        self._last_mission = None
  
-        self._time_data = []
-        self._alt_data  = []
-        self._vel_data  = []
-        self._acc_data  = []
+        self._time_data = np.array([], dtype=np.float64)
+        self._alt_data  = np.array([], dtype=np.float64)
+        self._vel_data  = np.array([], dtype=np.float64)
+        self._acc_data  = np.array([], dtype=np.float64)
+
+        self._timer = QTimer()
+        self._timer.setInterval(200)  # ms — ajustable
+        self._timer.timeout.connect(self._refresh_graphs)
+        self._timer.start()
 
         self.label_mission = QLabel("--")
         self.label_mission.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -525,6 +534,14 @@ class PageBelle(QWidget):
         self.curve_acc = self.graph_vel_acc.plot(
             pen=pg.mkPen('#FF9800', width=2), name='Acc. (m/s²)'
         )
+
+        self.graph_alt.enableAutoRange(False)
+        self.graph_vel_acc.enableAutoRange(False)
+
+        self.graph_alt.setYRange(0, ALT_MAX)        # altitude max connue en m
+        self.graph_vel_acc.setYRange(ACC_MIN, ACC_MAX)   # ajuste selon vos valeurs
+
+        self._x_max = 5000  # ms — fenêtre initiale
  
         layout_principal = QHBoxLayout()
         layout_principal.setSpacing(6)
@@ -561,33 +578,40 @@ class PageBelle(QWidget):
             dico["imu_acc_z"]**2
         ))
  
-        self._time_data.append(t)
-        self._alt_data.append(alt)
-        self._vel_data.append(vel)
-        self._acc_data.append(acc)
-
-        self._time_data = self._time_data[-MAX_GRAPH_POINTS:]
-        self._alt_data  = self._alt_data[-MAX_GRAPH_POINTS:]
-        self._vel_data  = self._vel_data[-MAX_GRAPH_POINTS:]
-        self._acc_data  = self._acc_data[-MAX_GRAPH_POINTS:]
-
-        t_arr = np.array(self._time_data)
-        self.curve_alt.setData(t_arr, np.array(self._alt_data))
-        self.curve_vel.setData(t_arr, np.array(self._vel_data))
-        self.curve_acc.setData(t_arr, np.array(self._acc_data))
+        self._time_data = np.append(self._time_data, t)
+        self._alt_data  = np.append(self._alt_data,  alt)
+        self._vel_data  = np.append(self._vel_data,  vel)
+        self._acc_data  = np.append(self._acc_data,  acc)
  
         self.map_view.add_point(dico["lat"], dico["lon"])
         self.rocket_view.update_orientation(dico["roll"], dico["pitch"], dico["yaw"])
- 
+
         mission = dico["mission_state"]
-        color = MISSION_COLORS.get(mission, "#888888")
-        self.label_mission.setText(mission)
-        self.label_mission.setStyleSheet(
-            f"color: {color}; font-size: 16px; font-weight: bold;"
-        )
+        if mission != self._last_mission:
+            color = MISSION_COLORS.get(mission, "#888888")
+            self.label_mission.setText(mission)
+            self.label_mission.setStyleSheet(
+                f"color: {color}; font-size: 16px; font-weight: bold;"
+            )
+            self._last_mission = mission
  
         ms     = int(t)
         mins   = ms // 60000
         secs   = (ms % 60000) // 1000
         millis = ms % 1000
         self.label_time.setText(f"{mins:02d}:{secs:02d}.{millis:03d}")
+
+
+    def _refresh_graphs(self):
+        if len(self._time_data) == 0:
+            return
+        self.curve_alt.setData(self._time_data, self._alt_data)
+        self.curve_vel.setData(self._time_data, self._vel_data)
+        self.curve_acc.setData(self._time_data, self._acc_data)
+
+        t_current = self._time_data[-1]
+        if t_current > self._x_max:
+            self._x_max = t_current + GRAPHS_REFRESH_RATE  # avance par paliers de 5s
+
+        self.graph_alt.setXRange(self._time_data[0], self._x_max, padding=0)
+        self.graph_vel_acc.setXRange(self._time_data[0], self._x_max, padding=0)
