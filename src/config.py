@@ -1,7 +1,7 @@
 # --- Configuration du receiver ---
 
 SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
-#SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
+SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
 BOOSTER_SYS_ID = 2
@@ -18,6 +18,7 @@ ACC_MIN = -50
 ACC_MAX = 500
 
 GRAPHS_REFRESH_RATE = 2000
+MAX_GRAPH_POINTS = 5000
 
 
 # --- Configuration de DataManager ---

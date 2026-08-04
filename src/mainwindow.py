@@ -7,11 +7,11 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
 import numpy as np
 import os
-from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE
+from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS
 import time
 
 
-MAX_GRAPH_POINTS = 5000
+
 
 class Header(QWidget):
     def __init__(self, titre="Ground Station"):
@@ -582,6 +582,11 @@ class PageBelle(QWidget):
         self._alt_data  = np.append(self._alt_data,  alt)
         self._vel_data  = np.append(self._vel_data,  vel)
         self._acc_data  = np.append(self._acc_data,  acc)
+
+        self._time_data = self._time_data[-MAX_GRAPH_POINTS:]
+        self._alt_data  = self._alt_data[-MAX_GRAPH_POINTS:]
+        self._vel_data  = self._vel_data[-MAX_GRAPH_POINTS:]
+        self._acc_data  = self._acc_data[-MAX_GRAPH_POINTS:]
  
         self.map_view.add_point(dico["lat"], dico["lon"])
         self.rocket_view.update_orientation(dico["roll"], dico["pitch"], dico["yaw"])
@@ -611,7 +616,7 @@ class PageBelle(QWidget):
 
         t_current = self._time_data[-1]
         if t_current > self._x_max:
-            self._x_max = t_current + GRAPHS_REFRESH_RATE  # avance par paliers de 5s
+            self._x_max = t_current + GRAPHS_REFRESH_RATE  # avance par paliers de X secondes
 
         self.graph_alt.setXRange(self._time_data[0], self._x_max, padding=0)
         self.graph_vel_acc.setXRange(self._time_data[0], self._x_max, padding=0)
