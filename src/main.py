@@ -1,5 +1,4 @@
 import os
-import sys
 import platform
 
 import OpenGL
@@ -9,7 +8,7 @@ if platform == 'Linux':
     os.environ["QT_QPA_PLATFORM"] = "xcb"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "3.3"
 
-from PyQt6 import QtCore, QtGui
+from PyQt6 import QtGui
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
 
 fmt = QtGui.QSurfaceFormat()
