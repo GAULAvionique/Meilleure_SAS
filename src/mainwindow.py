@@ -7,10 +7,10 @@ from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
 import numpy as np
 import os
+from pathlib import Path
 from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS
-import time
 
-
+BASE_DIR = Path(__file__).resolve().parent
 
 
 class Header(QWidget):
@@ -23,7 +23,7 @@ class Header(QWidget):
         label_titre.setStyleSheet("font-size: 20px; font-weight: bold;")
 
         logo_label = QLabel()
-        logo_path = os.path.join(os.path.dirname(__file__), "assets", "logo_gaul.png")
+        logo_path = BASE_DIR/"assets"/"logo_gaul.png"
         if os.path.exists(logo_path):
             pixmap = QPixmap(logo_path).scaledToHeight(50, Qt.TransformationMode.SmoothTransformation)
             logo_label.setPixmap(pixmap)

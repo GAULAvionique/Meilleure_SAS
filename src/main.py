@@ -1,6 +1,28 @@
 import os
-from mainwindow import PageDonnees, Header, PageBelle
+import sys
+
+import OpenGL
+OpenGL.USE_ACCELERATE = False
+
+os.environ["QT_QPA_PLATFORM"] = "xcb"
+os.environ["MESA_GL_VERSION_OVERRIDE"] = "3.3"
+
+from PyQt6 import QtCore, QtGui
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
+
+fmt = QtGui.QSurfaceFormat()
+fmt.setRenderableType(QtGui.QSurfaceFormat.RenderableType.OpenGL)
+fmt.setProfile(QtGui.QSurfaceFormat.OpenGLContextProfile.CompatibilityProfile)
+fmt.setDepthBufferSize(24)
+QtGui.QSurfaceFormat.setDefaultFormat(fmt)
+
+import pyqtgraph as pg
+pg.setConfigOption('useOpenGL', True)
+
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve.parent
+
+from mainwindow import PageDonnees, Header, PageBelle
 from qt_material import apply_stylesheet
 from datetime import datetime
 import queue
@@ -15,7 +37,7 @@ from Logger import MyLogger
 class MyWindow(QMainWindow):
     def __init__(self, logger_sustainer, logger_booster, stop, thread):
         super().__init__()
-        obj_path = os.path.join(os.path.dirname(__file__), "assets", "fusee.obj")
+        obj_path = BASE_DIR / 'assets' / 'fusee.obj'
 
         self.showFullScreen()
         #self.setFixedSize(1280, 720)
@@ -87,6 +109,8 @@ if __name__ == "__main__":
 
 
     # Création de l'interface
+    
+    QtGui.QSurfaceFormat.setDefaultFormat(QtGui.QSurfaceFormat())
 
     app = QApplication([])
     apply_stylesheet(app, theme="dark_red.xml")
