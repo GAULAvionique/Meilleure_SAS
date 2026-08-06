@@ -9,6 +9,7 @@ if platform == 'Linux':
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "3.3"
 
 from PyQt6 import QtGui
+from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTabWidget, QWidget, QVBoxLayout
 
 fmt = QtGui.QSurfaceFormat()
@@ -117,12 +118,12 @@ if __name__ == "__main__":
     apply_stylesheet(app, theme="dark_red.xml")
     
     window = MyWindow(logger_booster, logger_sustainer, stop, thread)
-    window.showMaximized()
 
 
     # Création de Data Manager
 
     data_manager = DataManager(logger_sustainer, logger_booster, data_queue)
+    window.data_manager = data_manager
 
 
     data_manager.signal_booster.connect(window.page_booster.update_dico)
@@ -131,5 +132,6 @@ if __name__ == "__main__":
     data_manager.signal_freq.connect(window.page_sustainer.update_freq)
     data_manager.signal_booster.connect(window.page_belle_booster.update_dico)
     data_manager.signal_sustainer.connect(window.page_belle_sustainer.update_dico)
-
+    
+    QTimer.singleShot(100,window.showMaximized)
     app.exec()
