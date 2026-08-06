@@ -5,10 +5,11 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
 import pyqtgraph as pg
+from pyqtgraph import ViewBox
 import numpy as np
 import os
 from pathlib import Path
-from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS
+from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS, VEL_MAX, VEL_MIN
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -190,18 +191,33 @@ class PageDonnees(QWidget):
     def _groupe_imu(self):
         groupe = QGroupBox("IMU")
         layout = QGridLayout()
-        layout.setContentsMargins(2, 2, 2, 0)
+        layout.setContentsMargins(4, 4, 4, 0)
         layout.setSpacing(3)
-        layout.addWidget(QLabel("Acc X :"),     0, 0); layout.addWidget(self.label_imu_acc_x,        0, 1)
-        layout.addWidget(QLabel("Acc Y :"),     1, 0); layout.addWidget(self.label_imu_acc_y,        1, 1)
-        layout.addWidget(QLabel("Acc Z :"),     2, 0); layout.addWidget(self.label_imu_acc_z,        2, 1)
-        layout.addWidget(QLabel("Acc vert. :"), 3, 0); layout.addWidget(self.label_imu_acc_vertical, 3, 1)
-        layout.addWidget(QLabel("Gyro X :"),    4, 0); layout.addWidget(self.label_imu_gyro_x,       4, 1)
-        layout.addWidget(QLabel("Gyro Y :"),    5, 0); layout.addWidget(self.label_imu_gyro_y,       5, 1)
-        layout.addWidget(QLabel("Gyro Z :"),    6, 0); layout.addWidget(self.label_imu_gyro_z,       6, 1)
-        layout.addWidget(QLabel("Mag X :"),     7, 0); layout.addWidget(self.label_imu_mag_x,        7, 1)
-        layout.addWidget(QLabel("Mag Y :"),     8, 0); layout.addWidget(self.label_imu_mag_y,        8, 1)
-        layout.addWidget(QLabel("Mag Z :"),     9, 0); layout.addWidget(self.label_imu_mag_z,        9, 1)
+        layout.setColumnMinimumWidth(2, 90)
+
+        col1 = [
+            ("Acc X :",     self.label_imu_acc_x),
+            ("Acc Y :",     self.label_imu_acc_y),
+            ("Acc Z :",     self.label_imu_acc_z),
+            ("Acc vert. :", self.label_imu_acc_vertical),
+            ("Gyro X :",    self.label_imu_gyro_x),
+        ]
+        col2 = [
+            ("Gyro Y :",    self.label_imu_gyro_y),
+            ("Gyro Z :",    self.label_imu_gyro_z),
+            ("Mag X :",     self.label_imu_mag_x),
+            ("Mag Y :",     self.label_imu_mag_y),
+            ("Mag Z :",     self.label_imu_mag_z),
+        ]
+
+        for i, (cle, val) in enumerate(col1):
+            layout.addWidget(QLabel(cle), i, 0)
+            layout.addWidget(val,         i, 1)
+
+        for i, (cle, val) in enumerate(col2):
+            layout.addWidget(QLabel(cle), i, 2)
+            layout.addWidget(val,         i, 3)
+
         groupe.setLayout(layout)
         return groupe
 
@@ -443,11 +459,22 @@ class RocketView3D(QWidget):
  
             self.view = gl.GLViewWidget()
             self.view.setBackgroundColor('#1a1a2e')
-            self.view.setCameraPosition(distance=5)
+            self.view.setCameraPosition(distance=5, elevation=20, azimuth=45)
+
+            self.view.opts['center'] = pg.Vector(0, 0, 0.8)
+            self.view.update()
  
             axis = gl.GLAxisItem()
             axis.setSize(2, 2, 2)
             self.view.addItem(axis)
+
+            for text, pos in [
+                ("X", (2.2, 0, 0)),
+                ("Y", (0, 2.2, 0)),
+                ("Z", (0, 0, 2.2)),
+            ]:
+                label = gl.GLTextItem(pos=pos, text=text, color=(255, 255, 255, 255))
+                self.view.addItem(label)
  
             if obj_path and os.path.exists(obj_path):
                 verts, faces = _load_obj(obj_path)
@@ -516,7 +543,7 @@ class PageBelle(QWidget):
 
         self.graph_alt = pg.PlotWidget(title="Altitude Kalman (m)")
         self.graph_alt.showGrid(x=True, y=True, alpha=0.3)
-        self.graph_alt.setLabel('left', 'Altitude', units='m')
+        self.graph_alt.setLabel('left', 'Altitude (m)')
         self.graph_alt.setLabel('bottom', 'Temps', units='ms')
         self.curve_alt = self.graph_alt.plot(
             pen=pg.mkPen('#2196F3', width=2), name='Altitude'
@@ -530,16 +557,28 @@ class PageBelle(QWidget):
             pen=pg.mkPen('#4CAF50', width=2), name='Vitesse (m/s)'
         )
 
-        self.graph_vel_acc.setLabel('left', 'Vitesse', units='m/s')
-        self.curve_acc = self.graph_vel_acc.plot(
-            pen=pg.mkPen('#FF9800', width=2), name='Acc. (m/s²)'
-        )
+        self.graph_vel_acc.setLabel('left', 'Vitesse (m/s)')
+        self.vb_acc = ViewBox()
+        self.graph_vel_acc.scene().addItem(self.vb_acc)
+        self.graph_vel_acc.getAxis('right').linkToView(self.vb_acc)
+        self.graph_vel_acc.getAxis('right').setLabel('Accélération (m/s²)')
+        self.graph_vel_acc.showAxis('right')
+        self.vb_acc.setXLink(self.graph_vel_acc)
+        self.curve_acc = pg.PlotCurveItem(pen=pg.mkPen('#FF9800', width=2))
+        self.vb_acc.addItem(self.curve_acc)
+        legend.addItem(self.curve_acc, 'Acc. (m/s²)')
+        self.graph_vel_acc.getViewBox().sigResized.connect(
+            lambda: self.vb_acc.setGeometry(self.graph_vel_acc.getViewBox().sceneBoundingRect())
+)
 
         self.graph_alt.enableAutoRange(False)
         self.graph_vel_acc.enableAutoRange(False)
 
         self.graph_alt.setYRange(0, ALT_MAX)        # altitude max connue en m
-        self.graph_vel_acc.setYRange(ACC_MIN, ACC_MAX)   # ajuste selon vos valeurs
+        self.graph_vel_acc.setYRange(VEL_MIN, VEL_MAX)   # axe gauche — vitesse
+        self.vb_acc.setYRange(ACC_MIN, ACC_MAX)            # axe droit — accélération
+        self.vb_acc.enableAutoRange(False)
+
 
         self._x_max = 5000  # ms — fenêtre initiale
  
@@ -613,6 +652,7 @@ class PageBelle(QWidget):
         self.curve_alt.setData(self._time_data, self._alt_data)
         self.curve_vel.setData(self._time_data, self._vel_data)
         self.curve_acc.setData(self._time_data, self._acc_data)
+        self.vb_acc.setGeometry(self.graph_vel_acc.getViewBox().sceneBoundingRect())
 
         t_current = self._time_data[-1]
         if t_current > self._x_max:
