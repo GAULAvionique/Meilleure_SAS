@@ -1,10 +1,12 @@
 import os
 import sys
+import platform
 
 import OpenGL
 OpenGL.USE_ACCELERATE = False
 
-os.environ["QT_QPA_PLATFORM"] = "xcb"
+if platform == 'Linux':
+    os.environ["QT_QPA_PLATFORM"] = "xcb"
 os.environ["MESA_GL_VERSION_OVERRIDE"] = "3.3"
 
 from PyQt6 import QtCore, QtGui
@@ -20,7 +22,7 @@ import pyqtgraph as pg
 pg.setConfigOption('useOpenGL', True)
 
 from pathlib import Path
-BASE_DIR = Path(__file__).resolve.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 from mainwindow import PageDonnees, Header, PageBelle
 from qt_material import apply_stylesheet
@@ -37,7 +39,7 @@ from Logger import MyLogger
 class MyWindow(QMainWindow):
     def __init__(self, logger_sustainer, logger_booster, stop, thread):
         super().__init__()
-        obj_path = BASE_DIR / 'assets' / 'fusee.obj'
+        obj_path = str(BASE_DIR / 'assets' / 'fusee.obj')
 
         self.showFullScreen()
         #self.setFixedSize(1280, 720)
