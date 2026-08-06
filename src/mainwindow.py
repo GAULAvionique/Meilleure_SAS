@@ -234,8 +234,9 @@ class PageDonnees(QWidget):
         return groupe
 
     def _groupe_system_states(self):
-        groupe = QGroupBox("System States")
+        groupe = QGroupBox("")
         groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        groupe.setStyleSheet("QGroupBox { padding-top: 6px; margin-top: 0px; }")
         layout = QHBoxLayout()
         layout.setContentsMargins(2, 2, 2, 0)
         layout.setSpacing(3)
@@ -256,8 +257,9 @@ class PageDonnees(QWidget):
         return groupe
 
     def _groupe_event_states(self):
-        groupe = QGroupBox("Event States")
+        groupe = QGroupBox("")
         groupe.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        groupe.setStyleSheet("QGroupBox { padding-top: 6px; margin-top: 0px; }")
         layout = QHBoxLayout()
         layout.setContentsMargins(2, 2, 2, 0)
         layout.setSpacing(3)
