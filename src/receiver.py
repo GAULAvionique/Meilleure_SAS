@@ -50,14 +50,15 @@ def run_receiver(serial_port, source_system, baud_rate, data_queue, stop_event =
                 msg = master.recv_match(blocking=True, timeout=RECV_TIMEOUT_S)
 
                 if not msg:
+                    print("NO MESSAGE RECEIVED")
                     continue
 
                 msg_type = msg.get_type()
                 sys_id = msg.get_srcSystem()
 
                 if msg_type == "BAD_DATA":
-                    raw_payload = msg.get_msgbuf()
-                    # print(f"\n\033[91m[ERREUR CRC/FORMAT]\033[0m Reçu : {raw_payload.hex(' ')}")
+                    #raw_payload = msg.get_msgbuf()
+                    #print(f"\n\033[91m[ERREUR CRC/FORMAT]\033[0m Reçu : {raw_payload.hex(' ')}")
                     continue
 
                 if msg_type == "ROCKET_TELEMETRY":

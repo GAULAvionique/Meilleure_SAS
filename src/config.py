@@ -1,7 +1,9 @@
 # --- Configuration du receiver ---
 
-SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4"
-SERIAL_PORT = "udpin:0.0.0.0:14550"     # Décommenter pour tester virtuellement
+#SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4" # Mac
+#SERIAL_PORT = "COM10" # Windows
+#SERIAL_PORT = "/dev/ttyUSB0" # Linux
+#SERIAL_PORT = "udpin:0.0.0.0:14550" # UDP
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
 BOOSTER_SYS_ID = 2
@@ -103,12 +105,27 @@ EVENT_STATES_FLAGS = {          # Dictionnaire pour extraire les flags dans "eve
 }
 
 
-MISSION_STATES = {              # Dictionnaire pour donner du sens aux "mission_state"
-    0: "STATE_INIT",
-    1: "STATE_PREFLIGHT",
-    2: "STATE_ARMED",
-    3: "STATE_INFLIGHT",
-    4: "STATE_POSTFLIGHT",
+GLOBAL_STATES = {
+    0: "STATE_PREFLIGHT",
+    1: "STATE_ARMED",
+    2: "STATE_INFLIGHT",
+    3: "STATE_POSTFLIGHT",
+}
+
+SUB_STATES = {
+    0: {  # Sous-états pour STATE_PREFLIGHT
+        0: "STATE_STATIC_ORIENTED",
+        1: "STATE_PYROS_TEST",
+        2: "STATE_WAITING_FLIGHT",
+    },
+    2: {  # Sous-états pour STATE_INFLIGHT
+        0: "SUB_BOOST",
+        1: "SUB_FAST",
+        2: "SUB_COAST",
+        3: "SUB_DROGUE",
+        4: "SUB_MAIN",
+        5: "SUB_LANDED",
+    }
 }
 
 
@@ -131,6 +148,7 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "imu_mag_x",
     "imu_mag_y",
     "imu_mag_z",
+    "altitude_msl_cm",
     "pressure_pa",
     "temp_celsius",
     "highg_acc_x",
@@ -148,7 +166,6 @@ CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log 
     "highg_acc_vertical",
     "kalman_z",
     "kalman_v",
-    "altitude_msl_cm",
 
     "FLAG_IDEFIX_OK",
     "FLAG_BT_OK",

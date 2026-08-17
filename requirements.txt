@@ -5,3 +5,4 @@ fastcrc
 pyqtgraph
 PyOpenGL
 PyOpenGL_accelerate
+pyserial

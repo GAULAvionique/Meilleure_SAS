@@ -510,9 +510,9 @@ class RocketView3D(QWidget):
         if not self._gl_available or self.mesh is None:
             return
         self.mesh.resetTransform()
-        self.mesh.rotate(yaw,   0, 0, 1)
+        self.mesh.rotate(yaw,   1, 0, 0)
         self.mesh.rotate(pitch, 0, 1, 0)
-        self.mesh.rotate(roll,  1, 0, 0)
+        self.mesh.rotate(roll,  0, 0, 1)
  
 class PageBelle(QWidget):
     def __init__(self, obj_path=None):

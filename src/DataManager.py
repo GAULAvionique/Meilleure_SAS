@@ -1,4 +1,4 @@
-from config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, MISSION_STATES, BOOSTER_SYS_ID, SUSTAINER_SYS_ID
+from config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, GLOBAL_STATES, SUB_STATES, BOOSTER_SYS_ID, SUSTAINER_SYS_ID
 from PyQt6.QtCore import QObject, pyqtSignal
 import threading
 import queue
@@ -63,8 +63,23 @@ class DataManager(QObject):
 
     def _extract_enum(self, dico):
         try:
-            dico["mission_state"] = MISSION_STATES[dico["mission_state"]]
+            raw_state = int(dico["mission_state"])
+            
+            global_state_val = (raw_state >> 4) & 0x0F
+            sub_state_val = raw_state & 0x0F
+            
+            global_str = GLOBAL_STATES.get(global_state_val, "STATE_UNKNOWN")
+            sub_str = SUB_STATES.get(global_state_val, {}).get(sub_state_val, "")
+            
+            if sub_str:
+                dico["mission_state"] = f"{global_str} ({sub_str})"
+            else:
+                dico["mission_state"] = global_str
+                
         except KeyError:
+            dico["mission_state"] = "STATE_UNKNOWN"
+        except Exception as exc:
+            print(f"Erreur dans _extract_enum : {exc}")
             dico["mission_state"] = "STATE_UNKNOWN"
 
 
