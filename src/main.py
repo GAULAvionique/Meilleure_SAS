@@ -30,10 +30,10 @@ from datetime import datetime
 import queue
 import threading
 
-from DataManager import DataManager
+from data_manager import DataManager
 from receiver import run_receiver
 from config import SERIAL_PORT, BAUD_RATE, SOURCE_SYSTEM
-from Logger import MyLogger
+from logger import MyLogger
 
 
 class MyWindow(QMainWindow):
