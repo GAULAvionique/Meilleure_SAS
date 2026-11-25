@@ -6,3 +6,6 @@ pyqtgraph
 PyOpenGL
 PyOpenGL_accelerate
 pyserial
+
+# needed for TelemetryServer comms
+jsonschema

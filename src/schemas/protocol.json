@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:telemetry-server:protocol:1",
+  "title": "telemetry-server client protocol, version 1",
+  "description": "Every message is one JSON object on one line (UTF-8, terminated by a newline). The 'type' key selects the definition of the same name in $defs.",
+  "$defs": {
+    "n": {
+      "description": "Identifying number of a point of data received, in order.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "t_ms": {
+      "description": "Milliseconds since the session started, on the server's monotonic clock.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "data": {
+      "description": "All the telemetry data at a single point in time for a single machine and / or stage.",
+      "type": "object",
+      "properties": {
+        "n": {"$ref": "#/$defs/n"},
+        "t_ms": {"$ref": "#/$defs/t_ms"},
+        "stage": {
+					"type": ["string", "null"],
+					"minLength": 1
+				},
+        "values": {
+          "description": "Field name to value, already converted to the unit announced in 'hello'.",
+          "type": ["object", "null"],
+          "additionalProperties": {"type": ["number", "boolean", "string"]}
+        }
+      },
+      "required": ["n", "t_ms", "stage", "values"],
+      "additionalProperties": false
+    },
+		"samples": {
+      "description": "All the rocket's data between two points in time.",
+      "type": "object",
+      "properties": {
+        "type": {"const": "samples"},
+        "data": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/data"}
+        }
+      },
+      "required": ["type", "data"],
+      "additionalProperties": false
+    },
+    "hello": {
+      "description": "Server to client, once, first message on every connection.",
+      "type": "object",
+      "properties": {
+        "type": {"const": "hello"},
+        "protocol": {"const": 1},
+        "session": {
+          "description": "Identifies one run of the server. Sample numbers are only meaningful within one session.",
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "description": "Every field name that can appear in 'values', with its unit (null when it has none).",
+          "type": "object",
+          "additionalProperties": {"type": ["string", "null"]}
+        }
+      },
+      "required": ["type", "protocol", "session", "fields"],
+      "additionalProperties": false
+    },
+    "error": {
+      "description": "Server to client. 'bad_message': the client's last line was not a valid message. 'internal': the server failed while answering.",
+      "type": "object",
+      "properties": {
+        "type": {"const": "error"},
+        "code": {"enum": ["bad_message", "internal"]},
+        "detail": {"type": "string"}
+      },
+      "required": ["type", "code", "detail"],
+      "additionalProperties": false
+    },
+    "get": {
+      "description": "Client to server. Asks for the samples with from_n <= n < to_n.",
+      "type": "object",
+      "properties": {
+        "type": {"const": "get"},
+        "from_n": {"$ref": "#/$defs/n"},
+        "to_n": {"$ref": "#/$defs/n"}
+      },
+      "required": ["type", "from_n", "to_n"],
+      "additionalProperties": false
+    }
+  }
+}
