@@ -4,11 +4,11 @@ os.environ.pop("MAV_IGNORE_CRC", None)
 
 from pymavlink import mavutil
 import threading
-from config import RECV_TIMEOUT_S, RECONNECT_DELAY_S
+from .config import RECV_TIMEOUT_S, RECONNECT_DELAY_S
 
 # odb_mavlink_v1.py — copié depuis le repo ODB (commit: 24/05/26)
 # Mettre à jour si le dialecte MAVLink change
-import odb_mavlink_v1 as mavlink_dialect
+from . import odb_mavlink_v1 as mavlink_dialect
 
 mavutil.mavlink = mavlink_dialect
 mavutil.current_dialect = "odb_mavlink_v1"
@@ -82,7 +82,7 @@ def run_receiver(serial_port, source_system, baud_rate, data_queue, stop_event =
 
         finally:
             _close(master)
-        
+
         # Tentative de reconnexion
         stop_event.wait(RECONNECT_DELAY_S)
 

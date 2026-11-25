@@ -24,16 +24,16 @@ pg.setConfigOption('useOpenGL', True)
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 
-from mainwindow import PageDonnees, Header, PageBelle
+from lib.mainwindow import PageDonnees, Header, PageBelle
 from qt_material import apply_stylesheet
 from datetime import datetime
 import queue
 import threading
 
-from data_manager import DataManager
-from receiver import run_receiver
-from config import SERIAL_PORT, BAUD_RATE, SOURCE_SYSTEM
-from logger import MyLogger
+from lib.data_manager import DataManager
+from lib.receiver import run_receiver
+from lib.config import SERIAL_PORT, BAUD_RATE, SOURCE_SYSTEM
+from lib.logger import MyLogger
 
 
 class MyWindow(QMainWindow):
@@ -53,7 +53,7 @@ class MyWindow(QMainWindow):
         self.page_sustainer = PageDonnees()
         self.page_belle_booster   = PageBelle(obj_path)
         self.page_belle_sustainer = PageBelle(obj_path)
-        
+
         self.tabs = QTabWidget()
         self.tabs.addTab(self.page_booster, "Booster (Données)")
         self.tabs.addTab(self.page_sustainer, "Sustainer (Données)")
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
 
     # Création des instances
-    
+
     logger_booster = MyLogger(nom_fichier_booster)
     logger_sustainer = MyLogger(nom_fichier_sustainer)
 
@@ -111,12 +111,12 @@ if __name__ == "__main__":
 
 
     # Création de l'interface
-    
+
     QtGui.QSurfaceFormat.setDefaultFormat(QtGui.QSurfaceFormat())
 
     app = QApplication([])
     apply_stylesheet(app, theme="dark_red.xml")
-    
+
     window = MyWindow(logger_booster, logger_sustainer, stop, thread)
 
 
@@ -132,6 +132,6 @@ if __name__ == "__main__":
     data_manager.signal_freq.connect(window.page_sustainer.update_freq)
     data_manager.signal_booster.connect(window.page_belle_booster.update_dico)
     data_manager.signal_sustainer.connect(window.page_belle_sustainer.update_dico)
-    
+
     QTimer.singleShot(100,window.showMaximized)
     app.exec()

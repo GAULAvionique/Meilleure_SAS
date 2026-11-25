@@ -3,7 +3,7 @@ os.environ["MAVLINK20"] = "1"
 
 import time
 from pymavlink import mavutil
-import odb_mavlink_v1 as mavlink_dialect
+from . import odb_mavlink_v1 as mavlink_dialect
 
 # --- CONFIGURATION ---
 #SERIAL_PORT = 'COM15'
@@ -14,17 +14,17 @@ SUSTAINER_SYSTEM_ID = 3
 
 def run_transmitter():
     master = mavutil.mavlink_connection(SERIAL_PORT, baud=BAUD_RATE)
-    
+
     # Instances MAVLink séparées pour chaque airframe.
     booster_mav = mavlink_dialect.MAVLink(master, srcSystem=BOOSTER_SYSTEM_ID, srcComponent=1)
     sustainer_mav = mavlink_dialect.MAVLink(master, srcSystem=SUSTAINER_SYSTEM_ID, srcComponent=1)
 
-    print(f"Transmission lancée sur {SERIAL_PORT}...")    
+    print(f"Transmission lancée sur {SERIAL_PORT}...")
     start_time = time.time()
 
     while True:
         current_ms = int((time.time() - start_time) * 1000)
-        
+
         # --- ENVOI BOOSTER (ID 1) ---
         booster_mav.rocket_telemetry_send(
             time_boot_ms=current_ms,
@@ -45,7 +45,7 @@ def run_transmitter():
             imu_mag_y=int(45.6 * 100.0),
             imu_mag_z=int(78.9 * 100.0),
             altitude_msl_cm=int(1200.0 * 100.0),
-            pressure_pa=int(101325),    
+            pressure_pa=int(101325),
             temp_celsius=int(25.0 * 100.0),      # 25 C -> 2500 cdegC
             highg_acc_x=int(0.00 * 100.0),
             highg_acc_y=int(0.00 * 100.0),

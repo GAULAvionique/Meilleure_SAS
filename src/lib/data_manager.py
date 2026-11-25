@@ -1,4 +1,4 @@
-from config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, GLOBAL_STATES, SUB_STATES, BOOSTER_SYS_ID, SUSTAINER_SYS_ID
+from .config import CONVERSIONS, SYSTEM_STATES_FLAGS, EVENT_STATES_FLAGS, GLOBAL_STATES, SUB_STATES, BOOSTER_SYS_ID, SUSTAINER_SYS_ID
 from PyQt6.QtCore import QObject, pyqtSignal
 import threading
 import queue
@@ -38,7 +38,7 @@ class DataManager(QObject):
             else:
                 if key != "mavpackettype":
                     print(f"La clé {key} n'est pas définie dans 'CONVERSIONS'.")
-        
+
 
     def _extract_flags(self, dico):
         try:
@@ -49,7 +49,7 @@ class DataManager(QObject):
 
             for key in EVENT_STATES_FLAGS:
                 event_states[key] = bool(dico["event_states"] & (1 << EVENT_STATES_FLAGS[key]))
-            
+
             del dico["system_states"]
             del dico["event_states"]
 
@@ -64,18 +64,18 @@ class DataManager(QObject):
     def _extract_enum(self, dico):
         try:
             raw_state = int(dico["mission_state"])
-            
+
             global_state_val = (raw_state >> 4) & 0x0F
             sub_state_val = raw_state & 0x0F
-            
+
             global_str = GLOBAL_STATES.get(global_state_val, "STATE_UNKNOWN")
             sub_str = SUB_STATES.get(global_state_val, {}).get(sub_state_val, "")
-            
+
             if sub_str:
                 dico["mission_state"] = f"{global_str} ({sub_str})"
             else:
                 dico["mission_state"] = global_str
-                
+
         except KeyError:
             dico["mission_state"] = "STATE_UNKNOWN"
         except Exception as exc:
@@ -96,7 +96,7 @@ class DataManager(QObject):
                 self.dico_top = dico
                 self.logger_top.log(dico.copy())
                 self.signal_sustainer.emit(dico.copy())
-                
+
             elif msg.get_srcSystem() == BOOSTER_SYS_ID:
                 self.dico_bot = dico
                 self.logger_bot.log(dico)
@@ -107,7 +107,7 @@ class DataManager(QObject):
 
         except KeyError as exc:
             print("[AVERTISSEMENT] Clé manquante : {exc}")
-        
+
         except Exception as exc:
             print(f"[ERREUR] _read a planté sur message {msg.get_type()} : {exc}")
 

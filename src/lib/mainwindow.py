@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QGroupBox,
-    QScrollArea, QSizePolicy, 
+    QScrollArea, QSizePolicy,
 )
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QPainter, QColor, QPen, QFont
@@ -9,7 +9,7 @@ from pyqtgraph import ViewBox
 import numpy as np
 import os
 from pathlib import Path
-from config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS, VEL_MAX, VEL_MIN
+from .config import ACC_MIN, ACC_MAX, ALT_MAX, GRAPHS_REFRESH_RATE, MAX_GRAPH_POINTS, VEL_MAX, VEL_MIN
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -359,8 +359,8 @@ MISSION_COLORS = {
     "STATE_POSTFLIGHT":  "#9C27B0",
     "STATE_UNKNOWN":     "#F44336",
 }
- 
- 
+
+
 def _load_obj(path):
     """Parse un fichier .obj → (vertices, faces) numpy."""
     vertices, faces = [], []
@@ -444,28 +444,28 @@ class TrajectoryMap(QWidget):
         painter.setPen(QPen(QColor(200, 200, 200)))
         painter.setFont(QFont("Arial", 8))
         painter.drawText(5, 5, w - 10, 20, Qt.AlignmentFlag.AlignRight, f"{lat:.6f}, {lon:.6f}")
- 
+
 class RocketView3D(QWidget):
     def __init__(self, obj_path=None):
         super().__init__()
         self._gl_available = False
         self.mesh = None
         self._setup(obj_path)
- 
+
     def _setup(self, obj_path):
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
- 
+
         try:
             import pyqtgraph.opengl as gl
- 
+
             self.view = gl.GLViewWidget()
             self.view.setBackgroundColor('#1a1a2e')
             self.view.setCameraPosition(distance=5, elevation=20, azimuth=45)
 
             self.view.opts['center'] = pg.Vector(0, 0, 0.8)
             self.view.update()
- 
+
             axis = gl.GLAxisItem()
             axis.setSize(2, 2, 2)
             self.view.addItem(axis)
@@ -477,14 +477,14 @@ class RocketView3D(QWidget):
             ]:
                 label = gl.GLTextItem(pos=pos, text=text, color=(255, 255, 255, 255))
                 self.view.addItem(label)
- 
+
             if obj_path and os.path.exists(obj_path):
                 verts, faces = _load_obj(obj_path)
                 center = verts.mean(axis=0)
                 verts -= center
                 scale = 2.0 / np.abs(verts).max()
                 verts *= scale
- 
+
                 md = gl.MeshData(vertexes=verts, faces=faces)
                 self.mesh = gl.GLMeshItem(
                     meshdata=md,
@@ -494,18 +494,18 @@ class RocketView3D(QWidget):
                     glOptions='opaque'
                 )
                 self.view.addItem(self.mesh)
- 
+
             self._gl_available = True
             layout.addWidget(self.view)
- 
+
         except Exception as e:
             lbl = QLabel(f"3D non disponible\n{e}")
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             lbl.setStyleSheet("color: #888;")
             layout.addWidget(lbl)
- 
+
         self.setLayout(layout)
- 
+
     def update_orientation(self, roll, pitch, yaw):
         if not self._gl_available or self.mesh is None:
             return
@@ -513,13 +513,13 @@ class RocketView3D(QWidget):
         self.mesh.rotate(yaw,   1, 0, 0)
         self.mesh.rotate(pitch, 0, 1, 0)
         self.mesh.rotate(roll,  0, 0, 1)
- 
+
 class PageBelle(QWidget):
     def __init__(self, obj_path=None):
         super().__init__()
 
         self._last_mission = None
- 
+
         self._time_data = np.array([], dtype=np.float64)
         self._alt_data  = np.array([], dtype=np.float64)
         self._vel_data  = np.array([], dtype=np.float64)
@@ -533,7 +533,7 @@ class PageBelle(QWidget):
         self.label_mission = QLabel("--")
         self.label_mission.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_mission.setFont(QFont("Arial", 16, QFont.Weight.Bold))
- 
+
         self.label_time = QLabel("00:00.000")
         self.label_time.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_time.setFont(QFont("Arial", 13))
@@ -583,32 +583,32 @@ class PageBelle(QWidget):
 
 
         self._x_max = 5000  # ms — fenêtre initiale
- 
+
         layout_principal = QHBoxLayout()
         layout_principal.setSpacing(6)
         layout_principal.setContentsMargins(6, 12, 6, 12)
- 
+
         col_gauche = QVBoxLayout()
         col_gauche.setSpacing(4)
- 
+
         row_mission = QHBoxLayout()
         row_mission.addWidget(self.label_mission, stretch=2)
         row_mission.addWidget(self.label_time,    stretch=1)
         col_gauche.addLayout(row_mission)
         col_gauche.addWidget(self.rocket_view, stretch=1)
         col_gauche.addWidget(self.map_view,    stretch=1)
- 
+
         col_droite = QVBoxLayout()
         col_droite.setSpacing(4)
         col_droite.addWidget(self.graph_alt,     stretch=1)
         col_droite.addWidget(self.graph_vel_acc, stretch=1)
- 
+
         layout_principal.addLayout(col_gauche, stretch=2)
         layout_principal.addLayout(col_droite, stretch=3)
- 
+
         self.setLayout(layout_principal)
 
- 
+
     def update_dico(self, dico):
         t   = dico["time_boot_ms"]
         alt = dico["kalman_z"]
@@ -618,7 +618,7 @@ class PageBelle(QWidget):
             dico["imu_acc_y"]**2 +
             dico["imu_acc_z"]**2
         ))
- 
+
         self._time_data = np.append(self._time_data, t)
         self._alt_data  = np.append(self._alt_data,  alt)
         self._vel_data  = np.append(self._vel_data,  vel)
@@ -628,7 +628,7 @@ class PageBelle(QWidget):
         self._alt_data  = self._alt_data[-MAX_GRAPH_POINTS:]
         self._vel_data  = self._vel_data[-MAX_GRAPH_POINTS:]
         self._acc_data  = self._acc_data[-MAX_GRAPH_POINTS:]
- 
+
         self.map_view.add_point(dico["lat"], dico["lon"])
         self.rocket_view.update_orientation(dico["roll"], dico["pitch"], dico["yaw"])
 
@@ -640,7 +640,7 @@ class PageBelle(QWidget):
                 f"color: {color}; font-size: 16px; font-weight: bold;"
             )
             self._last_mission = mission
- 
+
         ms     = int(t)
         mins   = ms // 60000
         secs   = (ms % 60000) // 1000

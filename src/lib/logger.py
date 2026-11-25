@@ -1,13 +1,17 @@
 import queue
 import threading
 import csv
-from config import CONTRAT
+from .config import CONTRAT
 
 
 class MyLogger:
-    def __init__(self, nomFichier):     # Contrat est la liste de tout ce qu'on veut afficher dans le fichier ex. ['time', 'altitude', 'speedX'].
+    # Contrat est la liste de tout ce qu'on veut afficher dans le fichier ex. ['time', 'altitude', 'speedX'].
+    def __init__(self, nomFichier):
         self.fichier = open(nomFichier, 'w')
-        self.writer = csv.DictWriter(self.fichier, fieldnames=CONTRAT, extrasaction='ignore', restval='N/A') # Se fie à CONTRAT,
+
+        # Se fie à CONTRAT,
+        self.writer = csv.DictWriter(self.fichier, fieldnames=CONTRAT, extrasaction='ignore', restval='N/A')
+
         # si une données est de trop, il l'ignore et si une données est manquante, il écrit N/A
         self.writer.writeheader()
 
@@ -19,8 +23,8 @@ class MyLogger:
         self.thread = threading.Thread(target=self._worker)
         self.thread.start()
 
-    
-    def _worker(self):                          # Le worker est appelé automatiquement lorsque l'objet est créé.
+    # Le worker est appelé automatiquement lorsque l'objet est créé.
+    def _worker(self):
         while self._working.is_set():
             try:
                 données = self.queue.get(timeout=0.1)
@@ -29,12 +33,12 @@ class MyLogger:
             except queue.Empty:
                 continue
 
-
-    def log(self, données):                     # Méthode pour ajouter un paquet de données dans la queue du worker.
+    # Méthode pour ajouter un paquet de données dans la queue du worker.
+    def log(self, données):
         self.queue.put(données)
 
-
-    def stop(self):                             # Cette méthode doit être appelé pour terminer correctement l'exécution du thread.
+    # Cette méthode doit être appelé pour terminer correctement l'exécution du thread.
+    def stop(self):
         self._working.clear()
         self.thread.join()
 
@@ -44,6 +48,6 @@ class MyLogger:
                 self.writer.writerow(données)
             except queue.Empty:
                 break
-                
+
         self.fichier.flush()
         self.fichier.close()
