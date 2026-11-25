@@ -2,7 +2,7 @@
 
 #SERIAL_PORT = "/dev/tty.usbserial-BG00HQY4" # Mac
 #SERIAL_PORT = "COM10" # Windows
-#SERIAL_PORT = "/dev/ttyUSB0" # Linux
+SERIAL_PORT = "/dev/ttyUSB0" # Linux
 #SERIAL_PORT = "udpin:0.0.0.0:14550" # UDP
 BAUD_RATE = 115200
 SOURCE_SYSTEM = 1
@@ -27,7 +27,7 @@ MAX_GRAPH_POINTS = 5000
 
 # --- Configuration de DataManager ---
 
-CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié 
+CONVERSIONS = {                 # Dictionnaire de conversion : chaque valeur sera divisée par le nombre assicié
                                 # (attention que les clés soient exactement les mêmes que celle du dictionnaire décodé).
     "time_boot_ms"      : 1,
     "system_states"     : 1,
@@ -131,7 +131,7 @@ SUB_STATES = {
 
 # --- Configuration pour la classe logger ---
 
-CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log dans l'ordre. Le nom doit correspondre 
+CONTRAT = [         # Tout ce qui est dans cette liste sera dans le fichier log dans l'ordre. Le nom doit correspondre
                     # à une valeur du dictionnaire de conversion.
     "time_boot_ms",
     "mission_state",
