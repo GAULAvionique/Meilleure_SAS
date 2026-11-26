@@ -161,7 +161,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
 
     server_conn = ServerConnection("127.0.0.1", 42069, _on_samples)
-
+    server_conn.start()
 
     os.environ["QT_AUTOSCREENSCALE_FACTOR"] = "1"
 
@@ -209,7 +209,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     data_manager.signal_sustainer.connect(window.page_belle_sustainer.update_dico)
 
     QTimer.singleShot(100,window.showMaximized)
+
+    # the code stops here until app.exec() returns
     app.exec()
+    server_conn.stop()
+    server_conn.join()
 
 if __name__ == "__main__":
     raise SystemExit(main())
