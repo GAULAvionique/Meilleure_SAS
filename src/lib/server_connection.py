@@ -10,7 +10,7 @@ import logging
 from threading import Thread, Event, Lock
 
 # local imports
-from .protocol import Data, decode
+from .protocol import Data, decode, ProtocolError
 
 
 # Gets the logger
@@ -77,7 +77,12 @@ class ServerConnection:
         """
 
         hello = self._reader.readline()
-        logger.info("Hello received: %s", hello)
+
+        try:
+            greetings = decode(hello)
+            logger.info(greetings)
+        except ProtocolError as e:
+            logger.info("Procotol error '%s' during parsing of hello: %s", e, hello)
 
         while not self.stop_requested:
             data = self._reader.readline()

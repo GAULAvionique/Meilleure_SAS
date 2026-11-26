@@ -26,14 +26,22 @@ def validator_for(name: str) -> Draft202012Validator:
     """
     return Draft202012Validator({"$ref": f"{_SCHEMA['$id']}#/$defs/{name}"}, registry=_REGISTRY)
 
-_CLIENT_MESSAGES = {"get": validator_for("get")}
+_SERVER_MESSAGES = {
+    "hello":   validator_for("hello"),
+    "samples": validator_for("samples"),
+    "error":   validator_for("error"),
+}
 
 
 class ProtocolError(SASError):
     """
     A client sent something that just don't work.
     Never fatal, just a reply saying it was wrong.
+    Code 76 represents EX_PROTOCOL in sysexits.h
     """
+    # In truth, the error will likely never reach main
+    # becaue it will probably be handled by the thread
+    exit_code = 76
 
 @dataclass(frozen=True, slots=True)
 class Data:
@@ -53,23 +61,48 @@ class Get:
     from_n: int
     to_n: int
 
-def decode(line: bytes) -> Get:
+@dataclass(frozen=True, slots=True)
+class Hello:
     """
-    One line from a client, checked against the schema. Raises ProtocolError if invalid.
+    Dataclass for hellos
+    """
+    protocol: int
+    session: str
+    fields: dict[str, str | None]
+
+@dataclass(frozen=True, slots=True)
+class Error:
+    """
+    dataclass for errors
+    """
+    code: str
+    detail: str
+
+def decode(line: bytes) -> Hello | list[Data] | Error:
+    """
+    One line from the server, checked against the schema. Raises ProtocolError if invalid.
     """
     try:
         message = json.loads(line)
     except (UnicodeDecodeError, json.JSONDecodeError) as e:
         raise ProtocolError(f"not valid JSON: {e}") from e
 
-    validator = _CLIENT_MESSAGES.get(message.get("type")) if isinstance(message, dict) else None
+    validator = _SERVER_MESSAGES.get(message.get("type")) if isinstance(message, dict) else None
     if validator is None:
         raise ProtocolError("Invalid message field")
 
     errors = [e.message for e in validator.iter_errors(message)]
     if errors:
         raise ProtocolError("; ".join(errors))
-    return Get(from_n=message["from_n"], to_n=message["to_n"])
+
+    match message["type"]:
+        case "hello":
+            return Hello(message["protocol"], message["session"], message["fields"])
+        case "samples":
+            return [Data(**entry) for entry in message["data"]]
+        case "error":
+            return Error(message["code"], message["detail"])
+        case _: raise ProtocolError(f"unhandled type {message['type']}")
 
 
 def _encode(message:dict) -> bytes:
